@@ -1,0 +1,31 @@
+<project>
+
+  <!-- This presetdef doesn't really work because it complains
+       when the jar target is attempted. -->
+  <presetdef name=".javac">
+    <javac includeantruntime="false" />
+  </presetdef>
+
+  <target name="clean">
+    <delete dir="build"/>
+  </target>
+
+  <target name="compile">
+    <mkdir dir="build/classes"/>
+    <javac srcdir="src" destdir="build/classes" includeantruntime="false"/>
+  </target>
+
+  <target name="jar" depends="compile">
+    <mkdir dir="build/jar"/>
+    <jar destfile="build/jar/Dashboard.jar" basedir="build/classes">
+      <manifest>
+        <attribute name="Main-Class" value="dashboard.thematrix.Main"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="run" depends="jar">
+    <java jar="build/jar/Dashboard.jar" fork="true"/>
+  </target>
+
+</project>
