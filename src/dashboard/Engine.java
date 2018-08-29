@@ -1,14 +1,16 @@
 
-package dashboard.thematrix;
+package dashboard;
+
+import javax.swing.JFrame;
 
 public class Engine extends Thread
 {
-  private Matrix matrix;
+  private JFrame frame;
   private boolean running;
 
-  public Engine(Matrix m)
+  public Engine(JFrame f)
   {
-    matrix = m;
+    frame = f;
     running = false;
   }
 
@@ -18,7 +20,7 @@ public class Engine extends Thread
 
     while (running)
     {
-      matrix.repaint();
+      frame.repaint();
 
       try
       {

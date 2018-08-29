@@ -1,12 +1,15 @@
 
-package dashboard.thematrix;
+package dashboard;
 
+import dashboard.clock.ClockPanel;
+import dashboard.thematrix.Matrix;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-public class Main
+public class App
 {
   public static void main(String args[])
   {
@@ -17,12 +20,12 @@ public class Main
       file = args[0];
     }
 
-    new Main(file);
+    new App(file);
   }
 
   private String specialFile;
 
-  public Main(String theSpecialFile)
+  public App(String theSpecialFile)
   {
     specialFile = theSpecialFile;
 
@@ -39,13 +42,17 @@ public class Main
           frame.setUndecorated(true);
           gd[0].setFullScreenWindow(frame);
 
+          frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
+
           Matrix matrix = new Matrix(frame, specialFile);
           frame.getContentPane().add(matrix);
+          frame.getContentPane().add(new ClockPanel());
+
           frame.getContentPane().setCursor(BlankCursor.getCursor());
           frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
           frame.setVisible(true);
 
-          Thread thread = new Engine(matrix);
+          Thread thread = new Engine(frame);
           thread.start();
         }
     });

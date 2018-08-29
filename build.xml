@@ -17,9 +17,10 @@
 
   <target name="jar" depends="compile">
     <mkdir dir="build/jar"/>
+    <delete file="build/jar/Dashboard.jar"/>
     <jar destfile="build/jar/Dashboard.jar" basedir="build/classes">
       <manifest>
-        <attribute name="Main-Class" value="dashboard.thematrix.Main"/>
+        <attribute name="Main-Class" value="dashboard.App"/>
       </manifest>
     </jar>
   </target>

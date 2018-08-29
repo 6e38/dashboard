@@ -1,5 +1,5 @@
 
-package dashboard.thematrix;
+package dashboard;
 
 import java.awt.Cursor;
 import java.awt.image.BufferedImage;
