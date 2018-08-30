@@ -18,7 +18,9 @@
   <target name="jar" depends="compile">
     <mkdir dir="build/jar"/>
     <delete file="build/jar/Dashboard.jar"/>
-    <jar destfile="build/jar/Dashboard.jar" basedir="build/classes">
+    <jar destfile="build/jar/Dashboard.jar">
+      <fileset dir="build/classes"/>
+      <fileset dir="res"/>
       <manifest>
         <attribute name="Main-Class" value="dashboard.App"/>
       </manifest>
