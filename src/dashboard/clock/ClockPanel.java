@@ -32,10 +32,13 @@ public class ClockPanel extends JPanel implements ComponentListener
   };
   private Font clockFont;
   private Font dateFont;
+  private Font remainingFont;
   private Dimension preferredSize;
   private boolean isSized;
   private String timeString;
   private String dateString;
+  private String ampmString;
+  private String remainingString;
   private Point timePoint;
   private Point datePoint;
 
@@ -43,27 +46,35 @@ public class ClockPanel extends JPanel implements ComponentListener
   {
     super();
 
+    final float clockFontSize = 100f;
+    final float dateFontSize = 25f;
+    final float remainingFontSize = 15f;
+
     try
     {
       InputStream stream = getClass().getResourceAsStream("/fonts/LANENAR_.ttf");
       Font font = Font.createFont(Font.TRUETYPE_FONT, stream);
-      clockFont = font.deriveFont(100f);
+      clockFont = font.deriveFont(clockFontSize);
 
       stream = getClass().getResourceAsStream("/fonts/Rubik-Light.ttf");
       font = Font.createFont(Font.TRUETYPE_FONT, stream);
-      dateFont = font.deriveFont(30f);
+      dateFont = font.deriveFont(dateFontSize);
+
+      remainingFont = font.deriveFont(remainingFontSize);
     }
     catch (FontFormatException fontFormatException)
     {
-      System.out.println("Failed to load font");
-      clockFont = new Font(Font.SANS_SERIF, Font.PLAIN, 80);
-      dateFont = new Font(Font.SANS_SERIF, Font.PLAIN, 20);
+      System.err.println("Failed to load font");
+      clockFont = new Font(Font.SANS_SERIF, Font.PLAIN, (int)clockFontSize);
+      dateFont = new Font(Font.SANS_SERIF, Font.PLAIN, (int)dateFontSize);
+      remainingFont = new Font(Font.SANS_SERIF, Font.PLAIN, (int)remainingFontSize);
     }
     catch (IOException ioException)
     {
-      System.out.println("IO failure while reading font");
-      clockFont = new Font(Font.SANS_SERIF, Font.PLAIN, 80);
-      dateFont = new Font(Font.SANS_SERIF, Font.PLAIN, 20);
+      System.err.println("IO failure while reading font");
+      clockFont = new Font(Font.SANS_SERIF, Font.PLAIN, (int)clockFontSize);
+      dateFont = new Font(Font.SANS_SERIF, Font.PLAIN, (int)dateFontSize);
+      remainingFont = new Font(Font.SANS_SERIF, Font.PLAIN, (int)remainingFontSize);
     }
 
     preferredSize = new Dimension(400, 65535);
@@ -72,6 +83,8 @@ public class ClockPanel extends JPanel implements ComponentListener
 
     timeString = null;
     dateString = null;
+    ampmString = null;
+    remainingString = null;
 
     addComponentListener(this);
   }
@@ -97,6 +110,19 @@ public class ClockPanel extends JPanel implements ComponentListener
         c.get(Calendar.DAY_OF_MONTH),
         Months[c.get(Calendar.MONTH)],
         c.get(Calendar.YEAR));
+    ampmString = c.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
+
+    Calendar five = (Calendar)c.clone();
+    five.set(Calendar.HOUR_OF_DAY, 17);
+    five.set(Calendar.MINUTE, 0);
+    five.set(Calendar.SECOND, 0);
+    five.set(Calendar.MILLISECOND, 0);
+
+    long ms = five.getTime().getTime() - c.getTime().getTime();
+    int hours = (int)(ms / 1000 / 60 / 60);
+    int mins = (int)(ms / 1000 / 60) % 60;
+    int secs = (int)(ms / 1000) % 60;
+    remainingString = String.format("%d:%02d:%02d remaining", hours, mins, secs);
   }
 
   private void draw(Graphics2D g)
@@ -117,7 +143,10 @@ public class ClockPanel extends JPanel implements ComponentListener
 
       g.setFont(clockFont);
       g.drawString(timeString, x, y);
+      g.setFont(dateFont);
+      g.drawString(ampmString, x + w, y);
 
+      y += metrics.getDescent();
       metrics = g.getFontMetrics(dateFont);
       y += metrics.getAscent();
       w = metrics.stringWidth(dateString);
@@ -125,6 +154,15 @@ public class ClockPanel extends JPanel implements ComponentListener
 
       g.setFont(dateFont);
       g.drawString(dateString, x, y);
+
+      y += metrics.getDescent();
+      metrics = g.getFontMetrics(remainingFont);
+      y += metrics.getAscent();
+      w = metrics.stringWidth(remainingString);
+      x = getWidth() / 2 - w / 2;
+
+      g.setFont(remainingFont);
+      g.drawString(remainingString, x, y);
     }
   }
 
