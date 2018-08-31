@@ -104,7 +104,12 @@ public class ClockPanel extends JPanel implements ComponentListener
   {
     Calendar c = Calendar.getInstance();
 
-    timeString = String.format("%d:%02d", c.get(Calendar.HOUR), c.get(Calendar.MINUTE));
+    int hour = c.get(Calendar.HOUR);
+    if (hour == 0)
+    {
+      hour = 12;
+    }
+    timeString = String.format("%d:%02d", hour, c.get(Calendar.MINUTE));
     dateString = String.format("%s %d %s %d",
         DaysOfWeek[c.get(Calendar.DAY_OF_WEEK)],
         c.get(Calendar.DAY_OF_MONTH),
@@ -122,7 +127,8 @@ public class ClockPanel extends JPanel implements ComponentListener
     int hours = (int)(ms / 1000 / 60 / 60);
     int mins = (int)(ms / 1000 / 60) % 60;
     int secs = (int)(ms / 1000) % 60;
-    remainingString = String.format("%d:%02d:%02d remaining", hours, mins, secs);
+    //remainingString = String.format("%d:%02d:%02d remaining", hours, mins, secs);
+    remainingString = String.format("%d:%02d to go", hours, mins);
   }
 
   private void draw(Graphics2D g)
