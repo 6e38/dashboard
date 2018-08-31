@@ -45,9 +45,12 @@ public class ClockPanel extends JPanel implements ComponentListener
 
     try
     {
-      InputStream stream = getClass().getResourceAsStream("/fonts/LANEUP__.ttf");
+      InputStream stream = getClass().getResourceAsStream("/fonts/LANENAR_.ttf");
       Font font = Font.createFont(Font.TRUETYPE_FONT, stream);
       clockFont = font.deriveFont(100f);
+
+      stream = getClass().getResourceAsStream("/fonts/Rubik-Light.ttf");
+      font = Font.createFont(Font.TRUETYPE_FONT, stream);
       dateFont = font.deriveFont(30f);
     }
     catch (FontFormatException fontFormatException)
@@ -67,8 +70,8 @@ public class ClockPanel extends JPanel implements ComponentListener
 
     isSized = false;
 
-    timeString = "8:00";
-    dateString = "Monday, August 24, 2018";
+    timeString = null;
+    dateString = null;
 
     addComponentListener(this);
   }
@@ -88,7 +91,7 @@ public class ClockPanel extends JPanel implements ComponentListener
   {
     Calendar c = Calendar.getInstance();
 
-    timeString = String.format("%d:%02d", c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE));
+    timeString = String.format("%d:%02d", c.get(Calendar.HOUR), c.get(Calendar.MINUTE));
     dateString = String.format("%s %d %s %d",
         DaysOfWeek[c.get(Calendar.DAY_OF_WEEK)],
         c.get(Calendar.DAY_OF_MONTH),
