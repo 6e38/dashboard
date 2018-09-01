@@ -4,8 +4,6 @@
 
 package dashboard;
 
-import dashboard.clock.ClockPanel;
-import dashboard.thematrix.Matrix;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import javax.swing.BoxLayout;
@@ -47,15 +45,17 @@ public class App
 
           frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
 
-          Matrix matrix = new Matrix(frame, specialFile);
-          frame.getContentPane().add(matrix);
-          frame.getContentPane().add(new ClockPanel());
+          Surface surface = new Surface();
+          surface.addComponent(new dashboard.thematrix.Matrix(specialFile));
+          surface.addComponent(new dashboard.clock.ClockPanel());
+
+          frame.getContentPane().add(surface);
 
           frame.getContentPane().setCursor(BlankCursor.getCursor());
           frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
           frame.setVisible(true);
 
-          Thread thread = new Engine(frame);
+          Thread thread = new Engine(surface);
           thread.start();
         }
     });

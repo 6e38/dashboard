@@ -4,15 +4,14 @@
 
 package dashboard.thematrix;
 
+import dashboard.Component;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
-public class Matrix extends JPanel implements CollisionAvoidance
+public class Matrix implements CollisionAvoidance, Component
 {
   private static final Color[] ColorMap = {
     new Color(0xff00ff00),
@@ -28,6 +27,7 @@ public class Matrix extends JPanel implements CollisionAvoidance
     new Color(0xffee0000),
   };
 
+  private String specialFile;
   private int width;
   private int height;
   private int charWidth;
@@ -42,16 +42,19 @@ public class Matrix extends JPanel implements CollisionAvoidance
 
   private Font mainFont;
 
-  public Matrix(JFrame parent, String specialFile)
+  public Matrix(String specialFile)
   {
-    super();
+    this.specialFile = specialFile;
+  }
 
-    width = parent.getWidth();
-    height = parent.getHeight();
+  @Override
+  public void surfaceSized(int width, int height, Graphics g)
+  {
+    this.width = width;
+    this.height = height;
 
     mainFont = new Font(Font.MONOSPACED, Font.PLAIN, 20);
 
-    Graphics g = parent.getGraphics();
     g.setFont(mainFont);
     FontMetrics metrics = g.getFontMetrics();
     charWidth = metrics.charWidth('A');
@@ -72,16 +75,7 @@ public class Matrix extends JPanel implements CollisionAvoidance
   }
 
   @Override
-  protected void paintComponent(Graphics g)
-  {
-    super.paintComponent(g);
-    Graphics2D g2d = (Graphics2D) g.create();
-    update();
-    draw(g2d);
-    g2d.dispose();
-  }
-
-  private void draw(Graphics2D g)
+  public void draw(Graphics2D g)
   {
     g.setColor(Color.BLACK);
     g.fillRect(0, 0, width, height);
@@ -110,7 +104,8 @@ public class Matrix extends JPanel implements CollisionAvoidance
     }
   }
 
-  private void update()
+  @Override
+  public void update()
   {
     for (int i = 0; i < drop.length; i++)
     {
@@ -121,6 +116,7 @@ public class Matrix extends JPanel implements CollisionAvoidance
     }
   }
 
+  @Override
   public boolean collides(int x, int y1, int y2)
   {
     for (Drop d : drop)

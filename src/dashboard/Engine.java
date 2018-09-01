@@ -4,16 +4,14 @@
 
 package dashboard;
 
-import javax.swing.JFrame;
-
 public class Engine extends Thread
 {
-  private JFrame frame;
+  private Surface surface;
   private boolean running;
 
-  public Engine(JFrame f)
+  public Engine(Surface s)
   {
-    frame = f;
+    surface = s;
     running = false;
   }
 
@@ -23,7 +21,7 @@ public class Engine extends Thread
 
     while (running)
     {
-      frame.repaint();
+      surface.repaint();
 
       try
       {

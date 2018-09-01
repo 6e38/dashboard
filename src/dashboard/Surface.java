@@ -1,0 +1,91 @@
+
+package dashboard;
+
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.util.ArrayList;
+import javax.swing.JPanel;
+
+public class Surface extends JPanel implements ComponentListener
+{
+  private boolean isSized;
+  private ArrayList<Component> components;
+
+  public Surface()
+  {
+    super();
+
+    isSized = false;
+    components = new ArrayList<Component>();
+
+    addComponentListener(this);
+  }
+
+  public void addComponent(Component c)
+  {
+    components.add(c);
+  }
+
+  private void update()
+  {
+    for (Component c : components)
+    {
+      c.update();
+    }
+  }
+
+  private void draw(Graphics2D g)
+  {
+    for (Component c : components)
+    {
+      c.draw(g);
+    }
+  }
+
+  @Override
+  protected void paintComponent(Graphics g)
+  {
+    super.paintComponent(g);
+
+    if (isSized)
+    {
+      Graphics2D g2d = (Graphics2D) g.create();
+      update();
+      draw(g2d);
+      g2d.dispose();
+    }
+  }
+
+  @Override
+  public void componentHidden(ComponentEvent e)
+  {
+  }
+
+  @Override
+  public void componentMoved(ComponentEvent e)
+  {
+  }
+
+  @Override
+  public void componentResized(ComponentEvent e)
+  {
+    int w = getWidth();
+    int h = getHeight();
+    Graphics g = getGraphics();
+
+    for (Component c : components)
+    {
+      c.surfaceSized(w, h, g);
+    }
+
+    isSized = true;
+  }
+
+  @Override
+  public void componentShown(ComponentEvent e)
+  {
+  }
+}
+
