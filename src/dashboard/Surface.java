@@ -1,6 +1,7 @@
 
 package dashboard;
 
+import java.awt.Color;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.Graphics;
@@ -55,6 +56,11 @@ public class Surface extends JPanel implements ComponentListener
       update();
       draw(g2d);
       g2d.dispose();
+    }
+    else
+    {
+      g.setColor(Color.BLACK);
+      g.fillRect(0, 0, getWidth(), getHeight());
     }
   }
 
