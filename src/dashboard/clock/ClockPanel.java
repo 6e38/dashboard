@@ -19,6 +19,9 @@ import java.io.IOException;
 
 public class ClockPanel implements Component
 {
+  private Color lateColor;
+  private Color earlyColor;
+  private Color weekendColor;
   private Rectangle bounds;
   private Font clockFont;
   private Font dateFont;
@@ -27,6 +30,9 @@ public class ClockPanel implements Component
 
   public ClockPanel()
   {
+    lateColor = new Color(140, 0, 0);
+    earlyColor = new Color(30, 215, 252);
+    weekendColor = new Color(50, 50, 50);
   }
 
   private void setSize(int width, int height)
@@ -95,12 +101,32 @@ public class ClockPanel implements Component
   {
     g.setColor(Color.BLACK);
     g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
-    g.setColor(Color.GREEN);
-    g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
-    g.translate(bounds.x, bounds.y);
 
     g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
-    g.setColor(Color.GREEN);
+
+    if (data.isWorkingHours())
+    {
+      g.setColor(Color.GREEN);
+    }
+    else if (data.isAfterHours())
+    {
+      g.setColor(lateColor);
+    }
+    else if (data.isEarly())
+    {
+      g.setColor(earlyColor);
+    }
+    else
+    {
+      g.setColor(weekendColor);
+    }
+
+    if (!data.isWeekend())
+    {
+      g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    }
+
+    g.translate(bounds.x, bounds.y);
 
     FontMetrics metrics;
     metrics = g.getFontMetrics(clockFont);

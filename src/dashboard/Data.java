@@ -75,10 +75,25 @@ public class Data
 
   public boolean isWorkingHours()
   {
-    return calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
-        && calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY
+    return !isWeekend()
         && calendar.after(eightam)
         && calendar.before(fivepm);
+  }
+
+  public boolean isWeekend()
+  {
+    return calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY
+        || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
+  }
+
+  public boolean isAfterHours()
+  {
+    return !isWeekend() && calendar.after(fivepm);
+  }
+
+  public boolean isEarly()
+  {
+    return !isWeekend() && calendar.before(eightam);
   }
 
   private void updateDayOfYear()
