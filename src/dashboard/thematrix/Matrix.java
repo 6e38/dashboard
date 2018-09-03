@@ -5,6 +5,7 @@
 package dashboard.thematrix;
 
 import dashboard.Component;
+import dashboard.Data;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -105,7 +106,7 @@ public class Matrix implements CollisionAvoidance, Component
   }
 
   @Override
-  public void update()
+  public void update(Data d)
   {
     for (int i = 0; i < drop.length; i++)
     {

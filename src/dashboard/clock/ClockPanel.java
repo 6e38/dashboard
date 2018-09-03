@@ -5,8 +5,8 @@
 package dashboard.clock;
 
 import dashboard.Component;
+import dashboard.Data;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.FontMetrics;
@@ -16,34 +16,17 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.io.InputStream;
 import java.io.IOException;
-import java.lang.StringBuilder;
-import java.util.Calendar;
 
 public class ClockPanel implements Component
 {
-  private static final String[] DaysOfWeek = {
-    "", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
-  };
-  private static final String[] Months = {
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  };
-
   private Rectangle bounds;
   private Font clockFont;
   private Font dateFont;
   private Font remainingFont;
-  private String timeString;
-  private String dateString;
-  private String ampmString;
-  private String remainingString;
+  private Data data;
 
   public ClockPanel()
   {
-    timeString = null;
-    dateString = null;
-    ampmString = null;
-    remainingString = null;
   }
 
   private void setSize(int width, int height)
@@ -101,48 +84,10 @@ public class ClockPanel implements Component
     }
   }
 
-  private void calculateRemaining(Calendar c)
-  {
-    if (c.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY &&
-        c.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY)
-    {
-      Calendar five = (Calendar)c.clone();
-      five.set(Calendar.HOUR_OF_DAY, 17);
-      five.set(Calendar.MINUTE, 0);
-      five.set(Calendar.SECOND, 0);
-      five.set(Calendar.MILLISECOND, 0);
-
-      long ms = five.getTime().getTime() - c.getTime().getTime();
-      int hours = (int)(ms / 1000 / 60 / 60);
-      int mins = (int)(ms / 1000 / 60) % 60;
-      int secs = (int)(ms / 1000) % 60;
-      remainingString = String.format("%d:%02d to go", hours, mins);
-    }
-    else
-    {
-      remainingString = "";
-    }
-  }
-
   @Override
-  public void update()
+  public void update(Data d)
   {
-    Calendar c = Calendar.getInstance();
-
-    int hour = c.get(Calendar.HOUR);
-    if (hour == 0)
-    {
-      hour = 12;
-    }
-    timeString = String.format("%d:%02d", hour, c.get(Calendar.MINUTE));
-    dateString = String.format("%s, %s %d, %d",
-        DaysOfWeek[c.get(Calendar.DAY_OF_WEEK)],
-        Months[c.get(Calendar.MONTH)],
-        c.get(Calendar.DAY_OF_MONTH),
-        c.get(Calendar.YEAR));
-    ampmString = c.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
-
-    calculateRemaining(c);
+    data = d;
   }
 
   @Override
@@ -160,31 +105,34 @@ public class ClockPanel implements Component
     FontMetrics metrics;
     metrics = g.getFontMetrics(clockFont);
     int y = metrics.getAscent();
-    int w = metrics.stringWidth(timeString);
+    int w = metrics.stringWidth(data.getTimeString());
     int x = getWidth() / 2 - w / 2;
 
     g.setFont(clockFont);
-    g.drawString(timeString, x, y);
+    g.drawString(data.getTimeString(), x, y);
     g.setFont(dateFont);
-    g.drawString(ampmString, x + w, y);
+    g.drawString(data.getAmPmString(), x + w, y);
 
     y += metrics.getDescent();
     metrics = g.getFontMetrics(dateFont);
     y += metrics.getAscent();
-    w = metrics.stringWidth(dateString);
+    w = metrics.stringWidth(data.getDateString());
     x = getWidth() / 2 - w / 2;
 
     g.setFont(dateFont);
-    g.drawString(dateString, x, y);
+    g.drawString(data.getDateString(), x, y);
 
-    y += metrics.getDescent();
-    metrics = g.getFontMetrics(remainingFont);
-    y += metrics.getAscent();
-    w = metrics.stringWidth(remainingString);
-    x = getWidth() / 2 - w / 2;
+    if (data.isWorkingHours())
+    {
+      y += metrics.getDescent();
+      metrics = g.getFontMetrics(remainingFont);
+      y += metrics.getAscent();
+      w = metrics.stringWidth(data.getRemainingString());
+      x = getWidth() / 2 - w / 2;
 
-    g.setFont(remainingFont);
-    g.drawString(remainingString, x, y);
+      g.setFont(remainingFont);
+      g.drawString(data.getRemainingString(), x, y);
+    }
   }
 }
 

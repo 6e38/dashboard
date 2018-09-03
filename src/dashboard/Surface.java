@@ -13,6 +13,7 @@ public class Surface extends JPanel implements ComponentListener
 {
   private boolean isSized;
   private ArrayList<Component> components;
+  private Data data;
 
   public Surface()
   {
@@ -20,6 +21,7 @@ public class Surface extends JPanel implements ComponentListener
 
     isSized = false;
     components = new ArrayList<Component>();
+    data = new Data();
 
     addComponentListener(this);
   }
@@ -31,9 +33,11 @@ public class Surface extends JPanel implements ComponentListener
 
   private void update()
   {
+    data.update();
+
     for (Component c : components)
     {
-      c.update();
+      c.update(data);
     }
   }
 
