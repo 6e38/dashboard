@@ -79,9 +79,6 @@ public class Matrix implements CollisionAvoidance, Component
   @Override
   public void draw(Graphics2D g)
   {
-    g.setColor(Color.BLACK);
-    g.fillRect(0, 0, width, height);
-
     if (data.isWorkingHours())
     {
       int lastColor = Model.Green;

@@ -43,6 +43,9 @@ public class Surface extends JPanel implements ComponentListener
 
   private void draw(Graphics2D g)
   {
+    g.setColor(Color.BLACK);
+    g.fillRect(0, 0, getWidth(), getHeight());
+
     for (Component c : components)
     {
       c.draw(g);

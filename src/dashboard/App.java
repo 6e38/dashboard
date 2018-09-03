@@ -46,6 +46,7 @@ public class App
           frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
 
           Surface surface = new Surface();
+          surface.addComponent(new dashboard.drip.Dripping());
           surface.addComponent(new dashboard.thematrix.Matrix(specialFile));
           surface.addComponent(new dashboard.clock.ClockPanel());
 

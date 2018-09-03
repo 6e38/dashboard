@@ -37,8 +37,8 @@ public class ClockPanel implements Component
 
   private void setSize(int width, int height)
   {
-    int w = width / 5;
-    int h = height / 4;
+    int w = 400;
+    int h = 300;
 
     bounds = new Rectangle(width / 2 - w / 2, height / 2 - h / 2, w, h);
   }
