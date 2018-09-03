@@ -28,6 +28,7 @@ public class Matrix implements CollisionAvoidance, Component
     new Color(0xffee0000),
   };
 
+  private Data data;
   private String specialFile;
   private int width;
   private int height;
@@ -81,26 +82,29 @@ public class Matrix implements CollisionAvoidance, Component
     g.setColor(Color.BLACK);
     g.fillRect(0, 0, width, height);
 
-    int lastColor = Model.Green;
-    g.setColor(ColorMap[lastColor]);
-    g.setFont(mainFont);
-
-    char[][] data = model.getData();
-    int[][] color = model.getColors();
-    int cols = data[0].length;
-    int rows = data.length;
-
-    for (int y = 0; y < rows; y++)
+    if (data.isWorkingHours())
     {
-      for (int x = 0; x < cols; x++)
-      {
-        if (color[y][x] != lastColor)
-        {
-          lastColor = color[y][x];
-          g.setColor(ColorMap[lastColor]);
-        }
+      int lastColor = Model.Green;
+      g.setColor(ColorMap[lastColor]);
+      g.setFont(mainFont);
 
-        g.drawChars(data[y], x, 1, x * charWidth + offsetX, y * charHeight + offsetY);
+      char[][] data = model.getData();
+      int[][] color = model.getColors();
+      int cols = data[0].length;
+      int rows = data.length;
+
+      for (int y = 0; y < rows; y++)
+      {
+        for (int x = 0; x < cols; x++)
+        {
+          if (color[y][x] != lastColor)
+          {
+            lastColor = color[y][x];
+            g.setColor(ColorMap[lastColor]);
+          }
+
+          g.drawChars(data[y], x, 1, x * charWidth + offsetX, y * charHeight + offsetY);
+        }
       }
     }
   }
@@ -108,11 +112,16 @@ public class Matrix implements CollisionAvoidance, Component
   @Override
   public void update(Data d)
   {
-    for (int i = 0; i < drop.length; i++)
+    data = d;
+
+    if (data.isWorkingHours())
     {
-      if (drop[i].update())
+      for (int i = 0; i < drop.length; i++)
       {
-        drop[i] = new Drop(cols, rows, model, this, null);
+        if (drop[i].update())
+        {
+          drop[i] = new Drop(cols, rows, model, this, null);
+        }
       }
     }
   }
