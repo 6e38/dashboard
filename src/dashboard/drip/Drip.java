@@ -26,7 +26,7 @@ public class Drip
     e.x = (float)Math.random() * (x2 - x1 - e.width) + x1;
     e.y = y - e.height * 0.80f;
     vel = 0;
-    delay = (float)Math.random() * 2f; // Magic seconds number
+    delay = (float)Math.random() * 4f; // Magic seconds number
   }
 
   public void update(float timeDelta)
