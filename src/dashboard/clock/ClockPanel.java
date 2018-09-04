@@ -108,11 +108,11 @@ public class ClockPanel implements Component
     {
       g.setColor(Color.GREEN);
     }
-    else if (data.isAfterHours())
+    else if (data.isAfterWork())
     {
       g.setColor(lateColor);
     }
-    else if (data.isEarly())
+    else if (data.isBeforeWork())
     {
       g.setColor(earlyColor);
     }
@@ -121,7 +121,7 @@ public class ClockPanel implements Component
       g.setColor(weekendColor);
     }
 
-    if (!data.isWeekend())
+    if (data.isBeforeWork() || data.isAfterWork() || data.isWorkingHours())
     {
       g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
     }

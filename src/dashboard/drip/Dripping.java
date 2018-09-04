@@ -63,7 +63,7 @@ public class Dripping implements Component
   {
     data = d;
 
-    if (data.isAfterHours())
+    if (data.isAfterWork())
     {
       for (Drip drip : drips)
       {
@@ -79,7 +79,7 @@ public class Dripping implements Component
 
   public void draw(Graphics2D g)
   {
-    if (data.isAfterHours())
+    if (data.isAfterWork())
     {
       g.setColor(deepred);
 

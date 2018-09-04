@@ -10,10 +10,23 @@ import java.util.Calendar;
 
 public class Data
 {
+  private enum State {
+    WorkingHours,
+    AfterWork,
+    BeforeWork,
+    Weekend,
+    Nighttime,
+    Morning
+  };
+
+  private State state;
+
   private Calendar calendar;
   private Calendar fivepm;
   private Calendar eightam;
-  DateFormatSymbols dfs;
+  private Calendar nighttime;
+  private Calendar morningtime;
+  private DateFormatSymbols dfs;
 
   private int dayOfYear;
 
@@ -34,6 +47,7 @@ public class Data
     calendar = Calendar.getInstance();
 
     updateDayOfYear();
+    updateState();
 
     dateString = String.format("%s, %s %d, %d",
         dfs.getWeekdays()[calendar.get(Calendar.DAY_OF_WEEK)],
@@ -73,27 +87,39 @@ public class Data
     return remainingString;
   }
 
+  public State getState()
+  {
+    return state;
+  }
+
   public boolean isWorkingHours()
   {
-    return !isWeekend()
-        && calendar.after(eightam)
-        && calendar.before(fivepm);
+    return state == State.WorkingHours;
   }
 
   public boolean isWeekend()
   {
-    return calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY
-        || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
+    return state == State.Weekend;
   }
 
-  public boolean isAfterHours()
+  public boolean isAfterWork()
   {
-    return !isWeekend() && calendar.after(fivepm);
+    return state == State.AfterWork;
   }
 
-  public boolean isEarly()
+  public boolean isBeforeWork()
   {
-    return !isWeekend() && calendar.before(eightam);
+    return state == State.BeforeWork;
+  }
+
+  public boolean isMorning()
+  {
+    return state == State.Morning;
+  }
+
+  public boolean isNighttime()
+  {
+    return state == State.Nighttime;
   }
 
   private void updateDayOfYear()
@@ -111,6 +137,18 @@ public class Data
       eightam.set(Calendar.MINUTE, 0);
       eightam.set(Calendar.SECOND, 0);
       eightam.set(Calendar.MILLISECOND, 0);
+
+      nighttime = (Calendar)calendar.clone();
+      nighttime.set(Calendar.HOUR_OF_DAY, 20);
+      nighttime.set(Calendar.MINUTE, 0);
+      nighttime.set(Calendar.SECOND, 0);
+      nighttime.set(Calendar.MILLISECOND, 0);
+
+      morningtime = (Calendar)calendar.clone();
+      morningtime.set(Calendar.HOUR_OF_DAY, 6);
+      morningtime.set(Calendar.MINUTE, 0);
+      morningtime.set(Calendar.SECOND, 0);
+      morningtime.set(Calendar.MILLISECOND, 0);
     }
   }
 
@@ -123,6 +161,35 @@ public class Data
       int mins = (int)(ms / 1000 / 60) % 60;
 
       remainingString = String.format("%d:%02d to go", hours, mins);
+    }
+  }
+
+  private void updateState()
+  {
+    if (calendar.before(morningtime))
+    {
+      state = State.Morning;
+    }
+    else if (calendar.after(nighttime))
+    {
+      state = State.Nighttime;
+    }
+    else if (calendar.before(eightam))
+    {
+      state = State.BeforeWork;
+    }
+    else if (calendar.after(fivepm))
+    {
+      state = State.AfterWork;
+    }
+    else if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY
+        || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
+    {
+      state = State.Weekend;
+    }
+    else
+    {
+      state = State.WorkingHours;
     }
   }
 }
