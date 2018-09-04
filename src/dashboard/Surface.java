@@ -4,12 +4,14 @@ package dashboard;
 import java.awt.Color;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
-public class Surface extends JPanel implements ComponentListener
+public class Surface extends JPanel implements ComponentListener, KeyListener
 {
   private boolean isSized;
   private ArrayList<Component> components;
@@ -98,6 +100,30 @@ public class Surface extends JPanel implements ComponentListener
 
   @Override
   public void componentShown(ComponentEvent e)
+  {
+  }
+
+  @Override
+  public void keyPressed(KeyEvent e)
+  {
+    switch (e.getKeyChar())
+    {
+      case '>':
+        data.cycleState();
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  @Override
+  public void keyReleased(KeyEvent e)
+  {
+  }
+
+  @Override
+  public void keyTyped(KeyEvent e)
   {
   }
 }

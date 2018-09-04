@@ -16,10 +16,19 @@ public class Data
     BeforeWork,
     Weekend,
     Nighttime,
-    Morning
+    Morning,
   };
 
   private State state;
+  private int overrideState;
+  private static final State[] stateMap = {
+    State.Morning,
+    State.BeforeWork,
+    State.WorkingHours,
+    State.AfterWork,
+    State.Nighttime,
+    State.Weekend,
+  };
 
   private Calendar calendar;
   private Calendar fivepm;
@@ -38,6 +47,8 @@ public class Data
   public Data()
   {
     dayOfYear = -1;
+
+    overrideState = -1;
 
     dfs = new DateFormatSymbols();
   }
@@ -87,39 +98,68 @@ public class Data
     return remainingString;
   }
 
-  public State getState()
+  public void cycleState()
   {
-    return state;
+    if (overrideState == -1)
+    {
+      for (int i = 0; i < stateMap.length; ++i)
+      {
+        if (stateMap[i] == state)
+        {
+          overrideState = i;
+          break;
+        }
+      }
+    }
+
+    overrideState = (overrideState + 1) % stateMap.length;
+
+    if (stateMap[overrideState] == state)
+    {
+      overrideState = -1;
+    }
+  }
+
+  private boolean isState(State x)
+  {
+    if (overrideState != -1)
+    {
+      return x == stateMap[overrideState];
+    }
+    else
+    {
+      return x == state;
+    }
   }
 
   public boolean isWorkingHours()
   {
-    return state == State.WorkingHours;
+    return isState(State.WorkingHours);
   }
 
   public boolean isWeekend()
   {
-    return state == State.Weekend;
+    return isState(State.Weekend);
   }
 
   public boolean isAfterWork()
   {
-    return state == State.AfterWork;
+    return isState(State.AfterWork);
   }
 
   public boolean isBeforeWork()
   {
-    return state == State.BeforeWork;
+    return isState(State.BeforeWork);
   }
 
   public boolean isMorning()
   {
-    return state == State.Morning;
+    return isState(State.Morning);
   }
 
   public boolean isNighttime()
   {
-    return state == State.Nighttime;
+    return isState(State.Nighttime);
   }
 
   private void updateDayOfYear()

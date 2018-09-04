@@ -51,6 +51,7 @@ public class App
           surface.addComponent(new dashboard.clock.ClockPanel());
 
           frame.getContentPane().add(surface);
+          frame.addKeyListener(surface);
 
           frame.getContentPane().setCursor(BlankCursor.getCursor());
           frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
