@@ -2,6 +2,8 @@
  * Copyright (c) 2018 Nathan Jenne
  */
 
+package dashboard.client;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import javax.net.ssl.SSLSocket;

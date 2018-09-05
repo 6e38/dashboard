@@ -31,4 +31,12 @@
     <java jar="build/jar/Dashboard.jar" fork="true"/>
   </target>
 
+  <target name="server">
+    <java classpath="build/jar/Dashboard.jar" classname="dashboard.server.Server" fork="true"/>
+  </target>
+
+  <target name="client">
+    <java classpath="build/jar/Dashboard.jar" classname="dashboard.client.Client" fork="true"/>
+  </target>
+
 </project>
