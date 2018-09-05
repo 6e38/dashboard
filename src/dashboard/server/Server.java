@@ -33,7 +33,7 @@ public class Server implements Runnable
 
       accept(server);
     }
-    catch (IOException e4)
+    catch (IOException e)
     {
       System.out.println("Failed to create server socket");
     }
