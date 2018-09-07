@@ -10,6 +10,6 @@ public interface Component
   void surfaceSized(int width, int height, Graphics g);
   void update();
   void draw(Graphics2D g);
-  void colorsChanged(int[] colors);
+  void paletteChanged(Palette palette);
 }
 

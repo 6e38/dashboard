@@ -6,7 +6,7 @@ package dashboard.clock;
 
 import dashboard.Component;
 import dashboard.Data;
-import java.awt.Color;
+import dashboard.Palette;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.FontMetrics;
@@ -19,9 +19,7 @@ import java.io.IOException;
 
 public class Clock implements Component
 {
-  private Color primaryColor;
-  private Color secondaryColor;
-  private Color backgroundColor;
+  private Palette palette;
   private Rectangle bounds;
   private Font clockFont;
   private Font dateFont;
@@ -32,7 +30,7 @@ public class Clock implements Component
   {
     this.data = data;
 
-    colorsChanged(data.getColors());
+    paletteChanged(data.getPalette());
   }
 
   private void setSize(int width, int height)
@@ -106,11 +104,11 @@ public class Clock implements Component
   {
     if (data.isBeforeWork() || data.isAfterWork() || data.isWorkingHours())
     {
-      g.setColor(backgroundColor);
+      g.setColor(palette.background);
       g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
     }
 
-    g.setColor(primaryColor);
+    g.setColor(palette.primary);
 
     if (data.isBeforeWork() || data.isAfterWork() || data.isWorkingHours())
     {
@@ -155,11 +153,9 @@ public class Clock implements Component
   }
 
   @Override
-  public void colorsChanged(int[] colors)
+  public void paletteChanged(Palette palette)
   {
-    primaryColor = new Color(colors[0], true);
-    secondaryColor = new Color(colors[1], true);
-    backgroundColor = new Color(colors[2], true);
+    this.palette = palette;
   }
 }
 

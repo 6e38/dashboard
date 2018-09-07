@@ -6,7 +6,7 @@ package dashboard.drip;
 
 import dashboard.Component;
 import dashboard.Data;
-import java.awt.Color;
+import dashboard.Palette;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -21,9 +21,7 @@ public class Dripping implements Component
   private int x2;
   private int y;
 
-  private Color primaryColor;
-  private Color secondaryColor;
-  private Color backgroundColor;
+  private Palette palette;
 
   private Data data;
 
@@ -31,7 +29,7 @@ public class Dripping implements Component
   {
     this.data = data;
 
-    colorsChanged(data.getColors());
+    paletteChanged(data.getPalette());
 
     drips = new ArrayList<Drip>();
 
@@ -88,10 +86,10 @@ public class Dripping implements Component
   @Override
   public void draw(Graphics2D g)
   {
-    g.setColor(backgroundColor);
+    g.setColor(palette.background);
     g.fillRect(0, 0, width, height);
 
-    g.setColor(primaryColor);
+    g.setColor(palette.primary);
 
     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -102,11 +100,9 @@ public class Dripping implements Component
   }
 
   @Override
-  public void colorsChanged(int[] colors)
+  public void paletteChanged(Palette palette)
   {
-    primaryColor = new Color(colors[0], true);
-    secondaryColor = new Color(colors[1], true);
-    backgroundColor = new Color(colors[2], true);
+    this.palette = palette;
   }
 }
 

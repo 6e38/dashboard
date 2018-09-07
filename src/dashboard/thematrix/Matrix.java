@@ -6,6 +6,7 @@ package dashboard.thematrix;
 
 import dashboard.Component;
 import dashboard.Data;
+import dashboard.Palette;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -28,9 +29,7 @@ public class Matrix implements CollisionAvoidance, Component
     new Color(0xffee0000),
   };
 
-  private Color primaryColor;
-  private Color secondaryColor;
-  private Color backgroundColor;
+  private Palette palette;
 
   private Data data;
   private String specialFile;
@@ -53,7 +52,7 @@ public class Matrix implements CollisionAvoidance, Component
     this.data = data;
     this.specialFile = specialFile;
 
-    colorsChanged(data.getColors());
+    paletteChanged(data.getPalette());
   }
 
   @Override
@@ -92,7 +91,7 @@ public class Matrix implements CollisionAvoidance, Component
   @Override
   public void draw(Graphics2D g)
   {
-    g.setColor(Color.BLACK);
+    g.setColor(palette.background);
     g.fillRect(0, 0, width, height);
 
     int lastColor = Model.Green;
@@ -146,11 +145,9 @@ public class Matrix implements CollisionAvoidance, Component
   }
 
   @Override
-  public void colorsChanged(int[] colors)
+  public void paletteChanged(Palette palette)
   {
-    primaryColor = new Color(colors[0], true);
-    secondaryColor = new Color(colors[1], true);
-    backgroundColor = new Color(colors[2], true);
+    this.palette = palette;
   }
 }
 

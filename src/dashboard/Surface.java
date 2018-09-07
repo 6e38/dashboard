@@ -140,6 +140,9 @@ public class Surface extends JPanel implements ComponentListener, KeyListener
         data.setBackground(backgrounds.get(backgroundIndex).getName());
         break;
 
+      case 'c':
+        break;
+
       default:
         break;
     }

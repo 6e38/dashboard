@@ -44,9 +44,7 @@ public class Data
   private String remainingString;
 
   private String background;
-  private int primaryColor;
-  private int secondaryColor;
-  private int backgroundColor;
+  private Palette palette;
 
   public Data()
   {
@@ -57,7 +55,7 @@ public class Data
     dfs = new DateFormatSymbols();
 
     setBackground(Background.Name);
-    setColors(0xff00ff00, 0xff00ee00, 0xff000000);
+    setPalette(PaletteFactory.get());
   }
 
   public void update()
@@ -95,20 +93,14 @@ public class Data
     background = bg;
   }
 
-  public int[] getColors()
+  public Palette getPalette()
   {
-    int[] array = new int[3];
-    array[0] = primaryColor;
-    array[1] = secondaryColor;
-    array[2] = backgroundColor;
-    return array;
+    return palette;
   }
 
-  public void setColors(int primary, int secondary, int background)
+  public void setPalette(Palette palette)
   {
-    primaryColor = primary;
-    secondaryColor = secondary;
-    backgroundColor = background;
+    this.palette = palette;
   }
 
   public String getDateString()
