@@ -17,7 +17,7 @@ import java.awt.RenderingHints;
 import java.io.InputStream;
 import java.io.IOException;
 
-public class ClockPanel implements Component
+public class Clock implements Component
 {
   private Color lateColor;
   private Color earlyColor;
@@ -28,7 +28,7 @@ public class ClockPanel implements Component
   private Font remainingFont;
   private Data data;
 
-  public ClockPanel()
+  public Clock()
   {
     lateColor = new Color(140, 0, 0);
     earlyColor = new Color(30, 215, 252);
