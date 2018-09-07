@@ -101,6 +101,11 @@ public class Surface extends JPanel implements ComponentListener, KeyListener
     int h = getHeight();
     Graphics g = getGraphics();
 
+    for (Component c : backgrounds)
+    {
+      c.surfaceSized(w, h, g);
+    }
+
     for (Component c : components)
     {
       c.surfaceSized(w, h, g);

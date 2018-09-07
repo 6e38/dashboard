@@ -85,29 +85,29 @@ public class Matrix implements CollisionAvoidance, Component
   @Override
   public void draw(Graphics2D g)
   {
-    if (data.isWorkingHours())
+    g.setColor(Color.BLACK);
+    g.fillRect(0, 0, width, height);
+
+    int lastColor = Model.Green;
+    g.setColor(ColorMap[lastColor]);
+    g.setFont(mainFont);
+
+    char[][] data = model.getData();
+    int[][] color = model.getColors();
+    int cols = data[0].length;
+    int rows = data.length;
+
+    for (int y = 0; y < rows; y++)
     {
-      int lastColor = Model.Green;
-      g.setColor(ColorMap[lastColor]);
-      g.setFont(mainFont);
-
-      char[][] data = model.getData();
-      int[][] color = model.getColors();
-      int cols = data[0].length;
-      int rows = data.length;
-
-      for (int y = 0; y < rows; y++)
+      for (int x = 0; x < cols; x++)
       {
-        for (int x = 0; x < cols; x++)
+        if (color[y][x] != lastColor)
         {
-          if (color[y][x] != lastColor)
-          {
-            lastColor = color[y][x];
-            g.setColor(ColorMap[lastColor]);
-          }
-
-          g.drawChars(data[y], x, 1, x * charWidth + offsetX, y * charHeight + offsetY);
+          lastColor = color[y][x];
+          g.setColor(ColorMap[lastColor]);
         }
+
+        g.drawChars(data[y], x, 1, x * charWidth + offsetX, y * charHeight + offsetY);
       }
     }
   }
@@ -117,14 +117,11 @@ public class Matrix implements CollisionAvoidance, Component
   {
     data = d;
 
-    if (data.isWorkingHours())
+    for (int i = 0; i < drop.length; i++)
     {
-      for (int i = 0; i < drop.length; i++)
+      if (drop[i].update())
       {
-        if (drop[i].update())
-        {
-          drop[i] = new Drop(cols, rows, model, this, null);
-        }
+        drop[i] = new Drop(cols, rows, model, this, null);
       }
     }
   }
