@@ -141,6 +141,16 @@ public class Surface extends JPanel implements ComponentListener, KeyListener
         break;
 
       case 'c':
+        Palette p = PaletteFactory.getNext();
+        data.setPalette(p);
+        for (Component c : backgrounds)
+        {
+          c.paletteChanged(p);
+        }
+        for (Component c : components)
+        {
+          c.paletteChanged(p);
+        }
         break;
 
       default:
