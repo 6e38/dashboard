@@ -14,6 +14,8 @@ import java.util.ArrayList;
 
 public class Dripping implements Component
 {
+  public static final String Name = "drip";
+
   private ArrayList<Drip> drips;
   private int width;
   private int height;
@@ -47,7 +49,7 @@ public class Dripping implements Component
   @Override
   public String getName()
   {
-    return "drip";
+    return Name;
   }
 
   @Override

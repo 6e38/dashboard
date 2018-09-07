@@ -94,6 +94,11 @@ public class Data
   public void setBackground(String bg)
   {
     background = bg;
+
+    if (listener != null)
+    {
+      listener.backgroundChanged(background);
+    }
   }
 
   public Palette getPalette()

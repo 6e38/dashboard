@@ -15,6 +15,8 @@ import java.awt.Graphics2D;
 
 public class Matrix implements CollisionAvoidance, Component
 {
+  public static final String Name = "matrix";
+
   private Color[] ColorMap;
 
   private Palette palette;
@@ -46,7 +48,7 @@ public class Matrix implements CollisionAvoidance, Component
   @Override
   public String getName()
   {
-    return "matrix";
+    return Name;
   }
 
   @Override

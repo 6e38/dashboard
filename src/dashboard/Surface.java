@@ -166,8 +166,41 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
   {
     Palette p = PaletteFactory.get(state);
     data.setPalette(p);
+
+    String s;
+
+    switch (state)
+    {
+      case WorkingHours:
+        s = dashboard.thematrix.Matrix.Name;
+        break;
+
+      case AfterWork:
+        s = dashboard.drip.Dripping.Name;
+        break;
+
+      case BeforeWork:
+        s = Background.Name;
+        break;
+
+      default:
+      case Weekend:
+        s = Background.Name;
+        break;
+
+      case Nighttime:
+        s = Background.Name;
+        break;
+
+      case Morning:
+        s = Background.Name;
+        break;
+    }
+
+    data.setBackground(s);
   }
 
+  @Override
   public void paletteChanged(Palette palette)
   {
     for (Component c : backgrounds)
@@ -179,6 +212,24 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
     {
       c.paletteChanged(palette);
     }
+  }
+
+  @Override
+  public void backgroundChanged(String background)
+  {
+    backgroundIndex = 0;
+
+    for (Component c : backgrounds)
+    {
+      if (c.getName().equals(background))
+      {
+        return;
+      }
+
+      ++backgroundIndex;
+    }
+
+    backgroundIndex = 0;
   }
 }
 
