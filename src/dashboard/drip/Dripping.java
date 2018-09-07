@@ -71,16 +71,13 @@ public class Dripping implements Component
   {
     data = d;
 
-    if (data.isAfterWork())
+    for (Drip drip : drips)
     {
-      for (Drip drip : drips)
-      {
-        drip.update(0.050f); // magic number!
+      drip.update(0.050f); // magic number!
 
-        if (drip.e.y > height)
-        {
-          drip.start(x1, x2, y);
-        }
+      if (drip.e.y > height)
+      {
+        drip.start(x1, x2, y);
       }
     }
   }
@@ -88,16 +85,16 @@ public class Dripping implements Component
   @Override
   public void draw(Graphics2D g)
   {
-    if (data.isAfterWork())
+    g.setColor(Color.BLACK);
+    g.fillRect(0, 0, width, height);
+
+    g.setColor(deepred);
+
+    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+    for (Drip drip : drips)
     {
-      g.setColor(deepred);
-
-      g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-      for (Drip drip : drips)
-      {
-        g.draw(drip.e);
-      }
+      g.draw(drip.e);
     }
   }
 }
