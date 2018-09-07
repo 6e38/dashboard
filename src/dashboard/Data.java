@@ -9,7 +9,7 @@ import java.util.Calendar;
 
 public class Data
 {
-  private enum State {
+  enum State {
     WorkingHours,
     AfterWork,
     BeforeWork,
@@ -18,6 +18,7 @@ public class Data
     Morning,
   };
 
+  private DataListener listener;
   private State state;
   private int overrideState;
   private static final State[] stateMap = {
@@ -60,6 +61,8 @@ public class Data
 
   public void update()
   {
+    state = State.Morning;
+
     calendar = Calendar.getInstance();
 
     updateDayOfYear();
@@ -101,6 +104,11 @@ public class Data
   public void setPalette(Palette palette)
   {
     this.palette = palette;
+
+    if (listener != null)
+    {
+      listener.paletteChanged(palette);
+    }
   }
 
   public String getDateString()
@@ -204,8 +212,8 @@ public class Data
       eightam.set(Calendar.MILLISECOND, 0);
 
       nighttime = (Calendar)calendar.clone();
-      nighttime.set(Calendar.HOUR_OF_DAY, 20);
-      nighttime.set(Calendar.MINUTE, 0);
+      nighttime.set(Calendar.HOUR_OF_DAY, 17);
+      nighttime.set(Calendar.MINUTE, 30);
       nighttime.set(Calendar.SECOND, 0);
       nighttime.set(Calendar.MILLISECOND, 0);
 
@@ -231,6 +239,8 @@ public class Data
 
   private void updateState()
   {
+    State old = state;
+
     if (calendar.before(morningtime))
     {
       state = State.Morning;
@@ -256,6 +266,19 @@ public class Data
     {
       state = State.WorkingHours;
     }
+
+    if (state != old)
+    {
+      if (listener != null)
+      {
+        listener.stateChanged(state);
+      }
+    }
+  }
+
+  void setDataListener(DataListener listener)
+  {
+    this.listener = listener;
   }
 }
 

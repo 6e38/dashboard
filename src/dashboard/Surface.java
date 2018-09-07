@@ -11,7 +11,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
-public class Surface extends JPanel implements ComponentListener, KeyListener
+public class Surface extends JPanel implements DataListener, ComponentListener, KeyListener
 {
   private boolean isSized;
   private ArrayList<Component> components;
@@ -26,6 +26,7 @@ public class Surface extends JPanel implements ComponentListener, KeyListener
     isSized = false;
 
     data = new Data();
+    data.setDataListener(this);
 
     components = new ArrayList<Component>();
     addComponent(new dashboard.clock.Clock(data));
@@ -143,14 +144,6 @@ public class Surface extends JPanel implements ComponentListener, KeyListener
       case 'c':
         Palette p = PaletteFactory.getNext();
         data.setPalette(p);
-        for (Component c : backgrounds)
-        {
-          c.paletteChanged(p);
-        }
-        for (Component c : components)
-        {
-          c.paletteChanged(p);
-        }
         break;
 
       default:
@@ -166,6 +159,26 @@ public class Surface extends JPanel implements ComponentListener, KeyListener
   @Override
   public void keyTyped(KeyEvent e)
   {
+  }
+
+  @Override
+  public void stateChanged(Data.State state)
+  {
+    Palette p = PaletteFactory.get(state);
+    data.setPalette(p);
+  }
+
+  public void paletteChanged(Palette palette)
+  {
+    for (Component c : backgrounds)
+    {
+      c.paletteChanged(palette);
+    }
+
+    for (Component c : components)
+    {
+      c.paletteChanged(palette);
+    }
   }
 }
 

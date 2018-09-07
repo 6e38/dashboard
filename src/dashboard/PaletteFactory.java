@@ -3,10 +3,20 @@ package dashboard;
 
 class PaletteFactory
 {
+  static final Palette working = new Palette(0x00ff00, 0xbb0000, 0x000000);
+  static final Palette afterWork = new Palette(0xdd0000, 0xbb0000, 0x330000);
+  static final Palette beforeWork = new Palette(0x0000dd, 0x0000bb, 0x000033);
+  static final Palette weekend = new Palette(0x555555, 0x555555, 0x000000);
+  static final Palette nighttime = new Palette(0x555555, 0x555555, 0x000000);
+  static final Palette morning = new Palette(0x555555, 0x555555, 0x000000);
+
   static final Palette[] palettes = {
-    new Palette(0x00ff00, 0x00ee00, 0x000000),
-    new Palette(0x900000, 0x700000, 0x000000),
-    new Palette(0x0000aa, 0x000080, 0x333333),
+    morning,
+    beforeWork,
+    working,
+    afterWork,
+    nighttime,
+    weekend,
   };
 
   static int index;
@@ -20,6 +30,31 @@ class PaletteFactory
   {
     index = (index + 1) % palettes.length;
     return palettes[index];
+  }
+
+  static Palette get(Data.State state)
+  {
+    switch (state)
+    {
+      case WorkingHours:
+        return working;
+
+      case AfterWork:
+        return afterWork;
+
+      case BeforeWork:
+        return beforeWork;
+
+      default:
+      case Weekend:
+        return weekend;
+
+      case Nighttime:
+        return nighttime;
+
+      case Morning:
+        return morning;
+    }
   }
 }
 
