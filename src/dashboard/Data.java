@@ -57,12 +57,12 @@ public class Data
 
     setBackground(Background.Name);
     setPalette(PaletteFactory.get());
+
+    state = State.Morning;
   }
 
   public void update()
   {
-    state = State.Morning;
-
     calendar = Calendar.getInstance();
 
     updateDayOfYear();

@@ -3,14 +3,14 @@ package dashboard;
 
 class PaletteFactory
 {
-  static final Palette working = new Palette(0x00ff00, 0xbb0000, 0x000000);
-  static final Palette afterWork = new Palette(0xdd0000, 0xbb0000, 0x330000);
-  static final Palette beforeWork = new Palette(0x0000dd, 0x0000bb, 0x000033);
-  static final Palette weekend = new Palette(0x555555, 0x555555, 0x000000);
-  static final Palette nighttime = new Palette(0x555555, 0x555555, 0x000000);
-  static final Palette morning = new Palette(0x555555, 0x555555, 0x000000);
+  private static final Palette working = new Palette(0x00ff00, 0xbb0000, 0x000000);
+  private static final Palette afterWork = new Palette(0xdd0000, 0xbb0000, 0x330000);
+  private static final Palette beforeWork = new Palette(0x0000dd, 0x0000bb, 0x000033);
+  private static final Palette weekend = new Palette(0x555555, 0x555555, 0x000000);
+  private static final Palette nighttime = new Palette(0x555555, 0x555555, 0x000000);
+  private static final Palette morning = new Palette(0x555555, 0x555555, 0x000000);
 
-  static final Palette[] palettes = {
+  private static final Palette[] palettes = {
     morning,
     beforeWork,
     working,
@@ -19,7 +19,7 @@ class PaletteFactory
     weekend,
   };
 
-  static int index;
+  static int index = 0;
 
   static Palette get()
   {
@@ -34,26 +34,52 @@ class PaletteFactory
 
   static Palette get(Data.State state)
   {
+    Palette p = null;
+
     switch (state)
     {
       case WorkingHours:
-        return working;
+        p = working;
+        break;
 
       case AfterWork:
-        return afterWork;
+        p = afterWork;
+        break;
 
       case BeforeWork:
-        return beforeWork;
+        p = beforeWork;
+        break;
 
       default:
       case Weekend:
-        return weekend;
+        p = weekend;
+        break;
 
       case Nighttime:
-        return nighttime;
+        p = nighttime;
+        break;
 
       case Morning:
-        return morning;
+        p = morning;
+        break;
+    }
+
+    updateIndex(p);
+
+    return p;
+  }
+
+  private static void updateIndex(Palette p)
+  {
+    index = 0;
+
+    for (int i = 0; i < palettes.length; ++i)
+    {
+      if (p == palettes[i])
+      {
+        index = i;
+        break;
+      }
     }
   }
 }
