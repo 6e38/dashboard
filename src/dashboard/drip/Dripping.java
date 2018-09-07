@@ -41,6 +41,13 @@ public class Dripping implements Component
     deepred = new Color(140, 0, 0);
   }
 
+  @Override
+  public String getName()
+  {
+    return "drip";
+  }
+
+  @Override
   public void surfaceSized(int width, int height, Graphics g)
   {
     this.width = width;
@@ -59,6 +66,7 @@ public class Dripping implements Component
     }
   }
 
+  @Override
   public void update(Data d)
   {
     data = d;
@@ -77,6 +85,7 @@ public class Dripping implements Component
     }
   }
 
+  @Override
   public void draw(Graphics2D g)
   {
     if (data.isAfterWork())

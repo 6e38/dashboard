@@ -44,6 +44,8 @@ public class Data
   private String ampmString;
   private String remainingString;
 
+  private String background;
+
   public Data()
   {
     dayOfYear = -1;
@@ -51,6 +53,8 @@ public class Data
     overrideState = -1;
 
     dfs = new DateFormatSymbols();
+
+    setBackground(Background.Name);
   }
 
   public void update()
@@ -76,6 +80,16 @@ public class Data
     ampmString = dfs.getAmPmStrings()[calendar.get(Calendar.AM_PM)];
 
     calculateRemaining();
+  }
+
+  public String getBackground()
+  {
+    return background;
+  }
+
+  public void setBackground(String bg)
+  {
+    background = bg;
   }
 
   public String getDateString()

@@ -54,6 +54,12 @@ public class ClockPanel implements Component
   }
 
   @Override
+  public String getName()
+  {
+    return "clock";
+  }
+
+  @Override
   public void surfaceSized(int width, int height, Graphics g)
   {
     setSize(width, height);

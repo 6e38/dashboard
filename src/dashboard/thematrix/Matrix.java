@@ -50,6 +50,12 @@ public class Matrix implements CollisionAvoidance, Component
   }
 
   @Override
+  public String getName()
+  {
+    return "matrix";
+  }
+
+  @Override
   public void surfaceSized(int width, int height, Graphics g)
   {
     this.width = width;

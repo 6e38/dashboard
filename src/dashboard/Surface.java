@@ -15,6 +15,8 @@ public class Surface extends JPanel implements ComponentListener, KeyListener
 {
   private boolean isSized;
   private ArrayList<Component> components;
+  private ArrayList<Component> backgrounds;
+  private int backgroundIndex;
   private Data data;
 
   public Surface()
@@ -23,6 +25,9 @@ public class Surface extends JPanel implements ComponentListener, KeyListener
 
     isSized = false;
     components = new ArrayList<Component>();
+    backgrounds = new ArrayList<Component>();
+    addBackground(new Background());
+    backgroundIndex = 0;
     data = new Data();
 
     addComponentListener(this);
@@ -33,9 +38,16 @@ public class Surface extends JPanel implements ComponentListener, KeyListener
     components.add(c);
   }
 
+  public void addBackground(Component c)
+  {
+    backgrounds.add(c);
+  }
+
   private void update()
   {
     data.update();
+
+    backgrounds.get(backgroundIndex).update(data);
 
     for (Component c : components)
     {
@@ -45,8 +57,7 @@ public class Surface extends JPanel implements ComponentListener, KeyListener
 
   private void draw(Graphics2D g)
   {
-    g.setColor(Color.BLACK);
-    g.fillRect(0, 0, getWidth(), getHeight());
+    backgrounds.get(backgroundIndex).draw(g);
 
     for (Component c : components)
     {
@@ -110,6 +121,11 @@ public class Surface extends JPanel implements ComponentListener, KeyListener
     {
       case '>':
         data.cycleState();
+        break;
+
+      case 'b':
+        backgroundIndex = (backgroundIndex + 1) % backgrounds.size();
+        data.setBackground(backgrounds.get(backgroundIndex).getName());
         break;
 
       default:
