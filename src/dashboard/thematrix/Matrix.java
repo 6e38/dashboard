@@ -15,19 +15,7 @@ import java.awt.Graphics2D;
 
 public class Matrix implements CollisionAvoidance, Component
 {
-  private static final Color[] ColorMap = {
-    new Color(0xff00ff00),
-    new Color(0xff00ee00),
-    new Color(0xff00dd00),
-    new Color(0xff00cc00),
-    new Color(0xff00bb00),
-    new Color(0xff00aa00),
-    new Color(0xff009900),
-    new Color(0xff008800),
-    new Color(0xff007700),
-    new Color(0xff006600),
-    new Color(0xffee0000),
-  };
+  private Color[] ColorMap;
 
   private Palette palette;
 
@@ -91,10 +79,10 @@ public class Matrix implements CollisionAvoidance, Component
   @Override
   public void draw(Graphics2D g)
   {
-    g.setColor(palette.background);
+    g.setColor(Color.BLACK);
     g.fillRect(0, 0, width, height);
 
-    int lastColor = Model.Green;
+    int lastColor = Model.Color;
     g.setColor(ColorMap[lastColor]);
     g.setFont(mainFont);
 
@@ -148,6 +136,24 @@ public class Matrix implements CollisionAvoidance, Component
   public void paletteChanged(Palette palette)
   {
     this.palette = palette;
+
+    ColorMap = new Color[Model.MaxColors];
+
+    int red = palette.primary.getRed();
+    int green = palette.primary.getGreen();
+    int blue = palette.primary.getBlue();
+
+    final int divisions = 16;
+    int rsub = red > 0 ? red / divisions : 0;
+    int gsub = green > 0 ? green / divisions : 0;
+    int bsub = blue > 0 ? blue / divisions : 0;
+
+    for (int i = 0; i < Model.MaxShades; ++i)
+    {
+      ColorMap[i] = new Color(red - rsub * i, green - gsub * i, blue - bsub *i);
+    }
+
+    ColorMap[Model.MaxShades] = palette.secondary;
   }
 }
 

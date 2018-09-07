@@ -11,9 +11,9 @@ public class Palette
 
   Palette(int primary, int secondary, int background)
   {
-    this.primary = new Color(primary, true);
-    this.secondary = new Color(secondary, true);
-    this.background = new Color(background, true);
+    this.primary = new Color(primary);
+    this.secondary = new Color(secondary);
+    this.background = new Color(background);
   }
 }
 
