@@ -19,20 +19,20 @@ import java.io.IOException;
 
 public class Clock implements Component
 {
-  private Color lateColor;
-  private Color earlyColor;
-  private Color weekendColor;
+  private Color primaryColor;
+  private Color secondaryColor;
+  private Color backgroundColor;
   private Rectangle bounds;
   private Font clockFont;
   private Font dateFont;
   private Font remainingFont;
   private Data data;
 
-  public Clock()
+  public Clock(Data data)
   {
-    lateColor = new Color(140, 0, 0);
-    earlyColor = new Color(30, 215, 252);
-    weekendColor = new Color(50, 50, 50);
+    this.data = data;
+
+    colorsChanged(data.getColors());
   }
 
   private void setSize(int width, int height)
@@ -97,40 +97,27 @@ public class Clock implements Component
   }
 
   @Override
-  public void update(Data d)
+  public void update()
   {
-    data = d;
   }
 
   @Override
   public void draw(Graphics2D g)
   {
-    g.setColor(Color.BLACK);
-    g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    if (data.isBeforeWork() || data.isAfterWork() || data.isWorkingHours())
+    {
+      g.setColor(backgroundColor);
+      g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    }
 
-    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
-
-    if (data.isWorkingHours())
-    {
-      g.setColor(Color.GREEN);
-    }
-    else if (data.isAfterWork())
-    {
-      g.setColor(lateColor);
-    }
-    else if (data.isBeforeWork())
-    {
-      g.setColor(earlyColor);
-    }
-    else
-    {
-      g.setColor(weekendColor);
-    }
+    g.setColor(primaryColor);
 
     if (data.isBeforeWork() || data.isAfterWork() || data.isWorkingHours())
     {
       g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
     }
+
+    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 
     g.translate(bounds.x, bounds.y);
 
@@ -165,6 +152,14 @@ public class Clock implements Component
       g.setFont(remainingFont);
       g.drawString(data.getRemainingString(), x, y);
     }
+  }
+
+  @Override
+  public void colorsChanged(int[] colors)
+  {
+    primaryColor = new Color(colors[0], true);
+    secondaryColor = new Color(colors[1], true);
+    backgroundColor = new Color(colors[2], true);
   }
 }
 

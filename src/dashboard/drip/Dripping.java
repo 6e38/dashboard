@@ -21,11 +21,18 @@ public class Dripping implements Component
   private int x2;
   private int y;
 
-  private Color deepred;
+  private Color primaryColor;
+  private Color secondaryColor;
+  private Color backgroundColor;
+
   private Data data;
 
-  public Dripping()
+  public Dripping(Data data)
   {
+    this.data = data;
+
+    colorsChanged(data.getColors());
+
     drips = new ArrayList<Drip>();
 
     for (int i = 0; i < 150; ++i)
@@ -37,8 +44,6 @@ public class Dripping implements Component
     x1 = 0;
     x2 = 0;
     y = 0;
-
-    deepred = new Color(140, 0, 0);
   }
 
   @Override
@@ -67,10 +72,8 @@ public class Dripping implements Component
   }
 
   @Override
-  public void update(Data d)
+  public void update()
   {
-    data = d;
-
     for (Drip drip : drips)
     {
       drip.update(0.050f); // magic number!
@@ -85,10 +88,10 @@ public class Dripping implements Component
   @Override
   public void draw(Graphics2D g)
   {
-    g.setColor(Color.BLACK);
+    g.setColor(backgroundColor);
     g.fillRect(0, 0, width, height);
 
-    g.setColor(deepred);
+    g.setColor(primaryColor);
 
     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -96,6 +99,14 @@ public class Dripping implements Component
     {
       g.draw(drip.e);
     }
+  }
+
+  @Override
+  public void colorsChanged(int[] colors)
+  {
+    primaryColor = new Color(colors[0], true);
+    secondaryColor = new Color(colors[1], true);
+    backgroundColor = new Color(colors[2], true);
   }
 }
 

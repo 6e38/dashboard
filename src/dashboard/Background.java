@@ -4,8 +4,6 @@
 
 package dashboard;
 
-import dashboard.Component;
-import dashboard.Data;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Graphics;
@@ -14,11 +12,14 @@ public class Background implements Component
 {
   public static final String Name = "blank";
 
+  private Color backgroundColor;
+
   private int width;
   private int height;
 
-  public Background()
+  public Background(Data data)
   {
+    colorsChanged(data.getColors());
   }
 
   @Override
@@ -35,15 +36,21 @@ public class Background implements Component
   }
 
   @Override
-  public void update(Data d)
+  public void update()
   {
   }
 
   @Override
   public void draw(Graphics2D g)
   {
-    g.setColor(Color.BLACK);
+    g.setColor(backgroundColor);
     g.fillRect(0, 0, width, height);
+  }
+
+  @Override
+  public void colorsChanged(int[] colors)
+  {
+    backgroundColor = new Color(colors[2], true);
   }
 }
 

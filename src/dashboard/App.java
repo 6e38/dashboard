@@ -45,10 +45,7 @@ public class App
 
           frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
 
-          Surface surface = new Surface();
-          surface.addBackground(new dashboard.thematrix.Matrix(specialFile));
-          surface.addBackground(new dashboard.drip.Dripping());
-          surface.addComponent(new dashboard.clock.Clock());
+          Surface surface = new Surface(specialFile);
 
           frame.getContentPane().add(surface);
           frame.addKeyListener(surface);

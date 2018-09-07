@@ -28,6 +28,10 @@ public class Matrix implements CollisionAvoidance, Component
     new Color(0xffee0000),
   };
 
+  private Color primaryColor;
+  private Color secondaryColor;
+  private Color backgroundColor;
+
   private Data data;
   private String specialFile;
   private int width;
@@ -44,9 +48,12 @@ public class Matrix implements CollisionAvoidance, Component
 
   private Font mainFont;
 
-  public Matrix(String specialFile)
+  public Matrix(Data data, String specialFile)
   {
+    this.data = data;
     this.specialFile = specialFile;
+
+    colorsChanged(data.getColors());
   }
 
   @Override
@@ -113,10 +120,8 @@ public class Matrix implements CollisionAvoidance, Component
   }
 
   @Override
-  public void update(Data d)
+  public void update()
   {
-    data = d;
-
     for (int i = 0; i < drop.length; i++)
     {
       if (drop[i].update())
@@ -138,6 +143,14 @@ public class Matrix implements CollisionAvoidance, Component
     }
 
     return false;
+  }
+
+  @Override
+  public void colorsChanged(int[] colors)
+  {
+    primaryColor = new Color(colors[0], true);
+    secondaryColor = new Color(colors[1], true);
+    backgroundColor = new Color(colors[2], true);
   }
 }
 

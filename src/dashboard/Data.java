@@ -4,7 +4,6 @@
 
 package dashboard;
 
-import java.awt.Color;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 
@@ -45,6 +44,9 @@ public class Data
   private String remainingString;
 
   private String background;
+  private int primaryColor;
+  private int secondaryColor;
+  private int backgroundColor;
 
   public Data()
   {
@@ -55,6 +57,7 @@ public class Data
     dfs = new DateFormatSymbols();
 
     setBackground(Background.Name);
+    setColors(0xff00ff00, 0xff00ee00, 0xff000000);
   }
 
   public void update()
@@ -90,6 +93,22 @@ public class Data
   public void setBackground(String bg)
   {
     background = bg;
+  }
+
+  public int[] getColors()
+  {
+    int[] array = new int[3];
+    array[0] = primaryColor;
+    array[1] = secondaryColor;
+    array[2] = backgroundColor;
+    return array;
+  }
+
+  public void setColors(int primary, int secondary, int background)
+  {
+    primaryColor = primary;
+    secondaryColor = secondary;
+    backgroundColor = background;
   }
 
   public String getDateString()

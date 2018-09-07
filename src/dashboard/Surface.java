@@ -19,16 +19,23 @@ public class Surface extends JPanel implements ComponentListener, KeyListener
   private int backgroundIndex;
   private Data data;
 
-  public Surface()
+  public Surface(String specialFile)
   {
     super();
 
     isSized = false;
-    components = new ArrayList<Component>();
-    backgrounds = new ArrayList<Component>();
-    addBackground(new Background());
-    backgroundIndex = 0;
+
     data = new Data();
+
+    components = new ArrayList<Component>();
+    addComponent(new dashboard.clock.Clock(data));
+
+    backgrounds = new ArrayList<Component>();
+    addBackground(new Background(data));
+    addBackground(new dashboard.thematrix.Matrix(data, specialFile));
+    addBackground(new dashboard.drip.Dripping(data));
+
+    backgroundIndex = 0;
 
     addComponentListener(this);
   }
@@ -47,11 +54,11 @@ public class Surface extends JPanel implements ComponentListener, KeyListener
   {
     data.update();
 
-    backgrounds.get(backgroundIndex).update(data);
+    backgrounds.get(backgroundIndex).update();
 
     for (Component c : components)
     {
-      c.update(data);
+      c.update();
     }
   }
 
