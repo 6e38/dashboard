@@ -6,6 +6,7 @@ package dashboard.thematrix;
 
 import dashboard.Component;
 import dashboard.Data;
+import dashboard.Palette;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -14,19 +15,11 @@ import java.awt.Graphics2D;
 
 public class Matrix implements CollisionAvoidance, Component
 {
-  private static final Color[] ColorMap = {
-    new Color(0xff00ff00),
-    new Color(0xff00ee00),
-    new Color(0xff00dd00),
-    new Color(0xff00cc00),
-    new Color(0xff00bb00),
-    new Color(0xff00aa00),
-    new Color(0xff009900),
-    new Color(0xff008800),
-    new Color(0xff007700),
-    new Color(0xff006600),
-    new Color(0xffee0000),
-  };
+  public static final String Name = "matrix";
+
+  private Color[] ColorMap;
+
+  private Palette palette;
 
   private Data data;
   private String specialFile;
@@ -44,9 +37,18 @@ public class Matrix implements CollisionAvoidance, Component
 
   private Font mainFont;
 
-  public Matrix(String specialFile)
+  public Matrix(Data data, String specialFile)
   {
+    this.data = data;
     this.specialFile = specialFile;
+
+    paletteChanged(data.getPalette());
+  }
+
+  @Override
+  public String getName()
+  {
+    return Name;
   }
 
   @Override
@@ -79,46 +81,41 @@ public class Matrix implements CollisionAvoidance, Component
   @Override
   public void draw(Graphics2D g)
   {
-    if (data.isWorkingHours())
+    g.setColor(Color.BLACK);
+    g.fillRect(0, 0, width, height);
+
+    int lastColor = Model.Color;
+    g.setColor(ColorMap[lastColor]);
+    g.setFont(mainFont);
+
+    char[][] data = model.getData();
+    int[][] color = model.getColors();
+    int cols = data[0].length;
+    int rows = data.length;
+
+    for (int y = 0; y < rows; y++)
     {
-      int lastColor = Model.Green;
-      g.setColor(ColorMap[lastColor]);
-      g.setFont(mainFont);
-
-      char[][] data = model.getData();
-      int[][] color = model.getColors();
-      int cols = data[0].length;
-      int rows = data.length;
-
-      for (int y = 0; y < rows; y++)
+      for (int x = 0; x < cols; x++)
       {
-        for (int x = 0; x < cols; x++)
+        if (color[y][x] != lastColor)
         {
-          if (color[y][x] != lastColor)
-          {
-            lastColor = color[y][x];
-            g.setColor(ColorMap[lastColor]);
-          }
-
-          g.drawChars(data[y], x, 1, x * charWidth + offsetX, y * charHeight + offsetY);
+          lastColor = color[y][x];
+          g.setColor(ColorMap[lastColor]);
         }
+
+        g.drawChars(data[y], x, 1, x * charWidth + offsetX, y * charHeight + offsetY);
       }
     }
   }
 
   @Override
-  public void update(Data d)
+  public void update()
   {
-    data = d;
-
-    if (data.isWorkingHours())
+    for (int i = 0; i < drop.length; i++)
     {
-      for (int i = 0; i < drop.length; i++)
+      if (drop[i].update())
       {
-        if (drop[i].update())
-        {
-          drop[i] = new Drop(cols, rows, model, this, null);
-        }
+        drop[i] = new Drop(cols, rows, model, this, null);
       }
     }
   }
@@ -135,6 +132,30 @@ public class Matrix implements CollisionAvoidance, Component
     }
 
     return false;
+  }
+
+  @Override
+  public void paletteChanged(Palette palette)
+  {
+    this.palette = palette;
+
+    ColorMap = new Color[Model.MaxColors];
+
+    int red = palette.primary.getRed();
+    int green = palette.primary.getGreen();
+    int blue = palette.primary.getBlue();
+
+    final int divisions = 16;
+    int rsub = red > 0 ? red / divisions : 0;
+    int gsub = green > 0 ? green / divisions : 0;
+    int bsub = blue > 0 ? blue / divisions : 0;
+
+    for (int i = 0; i < Model.MaxShades; ++i)
+    {
+      ColorMap[i] = new Color(red - rsub * i, green - gsub * i, blue - bsub *i);
+    }
+
+    ColorMap[Model.MaxShades] = palette.secondary;
   }
 }
 

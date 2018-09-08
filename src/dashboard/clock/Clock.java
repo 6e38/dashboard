@@ -6,7 +6,7 @@ package dashboard.clock;
 
 import dashboard.Component;
 import dashboard.Data;
-import java.awt.Color;
+import dashboard.Palette;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.FontMetrics;
@@ -17,22 +17,20 @@ import java.awt.RenderingHints;
 import java.io.InputStream;
 import java.io.IOException;
 
-public class ClockPanel implements Component
+public class Clock implements Component
 {
-  private Color lateColor;
-  private Color earlyColor;
-  private Color weekendColor;
+  private Palette palette;
   private Rectangle bounds;
   private Font clockFont;
   private Font dateFont;
   private Font remainingFont;
   private Data data;
 
-  public ClockPanel()
+  public Clock(Data data)
   {
-    lateColor = new Color(140, 0, 0);
-    earlyColor = new Color(30, 215, 252);
-    weekendColor = new Color(50, 50, 50);
+    this.data = data;
+
+    paletteChanged(data.getPalette());
   }
 
   private void setSize(int width, int height)
@@ -51,6 +49,12 @@ public class ClockPanel implements Component
   private int getHeight()
   {
     return bounds.height;
+  }
+
+  @Override
+  public String getName()
+  {
+    return "clock";
   }
 
   @Override
@@ -91,40 +95,27 @@ public class ClockPanel implements Component
   }
 
   @Override
-  public void update(Data d)
+  public void update()
   {
-    data = d;
   }
 
   @Override
   public void draw(Graphics2D g)
   {
-    g.setColor(Color.BLACK);
-    g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    if (data.isBeforeWork() || data.isAfterWork() || data.isWorkingHours())
+    {
+      g.setColor(palette.background);
+      g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    }
 
-    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
-
-    if (data.isWorkingHours())
-    {
-      g.setColor(Color.GREEN);
-    }
-    else if (data.isAfterWork())
-    {
-      g.setColor(lateColor);
-    }
-    else if (data.isBeforeWork())
-    {
-      g.setColor(earlyColor);
-    }
-    else
-    {
-      g.setColor(weekendColor);
-    }
+    g.setColor(palette.primary);
 
     if (data.isBeforeWork() || data.isAfterWork() || data.isWorkingHours())
     {
       g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
     }
+
+    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 
     g.translate(bounds.x, bounds.y);
 
@@ -159,6 +150,12 @@ public class ClockPanel implements Component
       g.setFont(remainingFont);
       g.drawString(data.getRemainingString(), x, y);
     }
+  }
+
+  @Override
+  public void paletteChanged(Palette palette)
+  {
+    this.palette = palette;
   }
 }
 

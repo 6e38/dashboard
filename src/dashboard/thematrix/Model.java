@@ -6,23 +6,23 @@ package dashboard.thematrix;
 
 public class Model
 {
-  public static final int Green = 0;
-  private static final int Green1 = 1;
-  private static final int Green2 = 2;
-  private static final int Green3 = 3;
-  private static final int Green4 = 4;
-  private static final int Green5 = 5;
-  private static final int Green6 = 6;
-  private static final int Green7 = 7;
-  private static final int Green8 = 8;
-  private static final int Green9 = 9;
-  private static final int MaxGreens = 10;
-  public static final int Red = 10;
-  private static final int MaxColors = 11;
+  public static final int Color = 0;
+  private static final int Shade1 = 1;
+  private static final int Shade2 = 2;
+  private static final int Shade3 = 3;
+  private static final int Shade4 = 4;
+  private static final int Shade5 = 5;
+  private static final int Shade6 = 6;
+  private static final int Shade7 = 7;
+  private static final int Shade8 = 8;
+  private static final int Shade9 = 9;
+  public static final int MaxShades = 10;
+  public static final int AltColor = 10;
+  public static final int MaxColors = 11;
 
-  public static int getRandomGreen()
+  public static int getRandomShade()
   {
-    return (int)(MaxGreens * Math.random());
+    return (int)(MaxShades * Math.random());
   }
 
   private int cols;
@@ -42,7 +42,7 @@ public class Model
       for (int x = 0; x < cols; x++)
       {
         data[y][x] = ' ';
-        color[y][x] = Green;
+        color[y][x] = Color;
       }
     }
   }

@@ -60,7 +60,7 @@ public class Drop
     {
       hasSpecial = true;
       isSpecial = true;
-      color = Model.Red;
+      color = Model.AltColor;
 
       message = specialStrings.get((int)(specialStrings.size() * Math.random())).toCharArray();
 
@@ -69,7 +69,7 @@ public class Drop
     else
     {
       isSpecial = false;
-      color = Model.getRandomGreen();
+      color = Model.getRandomShade();
       boolean blank = Math.random() < 0.50 ? true : false;
 
       int length = (int)((rows - 3) * Math.random()) + 3;
@@ -144,7 +144,7 @@ public class Drop
         hasSpecial = false;
         index = 0;
         y = startY;
-        color = Model.getRandomGreen();
+        color = Model.getRandomShade();
         makeRandomMessage(message);
         duration = message.length;
         updates = -1;

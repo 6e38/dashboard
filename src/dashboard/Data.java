@@ -4,13 +4,12 @@
 
 package dashboard;
 
-import java.awt.Color;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 
 public class Data
 {
-  private enum State {
+  enum State {
     WorkingHours,
     AfterWork,
     BeforeWork,
@@ -19,6 +18,7 @@ public class Data
     Morning,
   };
 
+  private DataListener listener;
   private State state;
   private int overrideState;
   private static final State[] stateMap = {
@@ -44,6 +44,9 @@ public class Data
   private String ampmString;
   private String remainingString;
 
+  private String background;
+  private Palette palette;
+
   public Data()
   {
     dayOfYear = -1;
@@ -51,6 +54,11 @@ public class Data
     overrideState = -1;
 
     dfs = new DateFormatSymbols();
+
+    setBackground(Background.Name);
+    setPalette(PaletteFactory.get());
+
+    state = State.Morning;
   }
 
   public void update()
@@ -76,6 +84,36 @@ public class Data
     ampmString = dfs.getAmPmStrings()[calendar.get(Calendar.AM_PM)];
 
     calculateRemaining();
+  }
+
+  public String getBackground()
+  {
+    return background;
+  }
+
+  public void setBackground(String bg)
+  {
+    background = bg;
+
+    if (listener != null)
+    {
+      listener.backgroundChanged(background);
+    }
+  }
+
+  public Palette getPalette()
+  {
+    return palette;
+  }
+
+  public void setPalette(Palette palette)
+  {
+    this.palette = palette;
+
+    if (listener != null)
+    {
+      listener.paletteChanged(palette);
+    }
   }
 
   public String getDateString()
@@ -179,8 +217,8 @@ public class Data
       eightam.set(Calendar.MILLISECOND, 0);
 
       nighttime = (Calendar)calendar.clone();
-      nighttime.set(Calendar.HOUR_OF_DAY, 20);
-      nighttime.set(Calendar.MINUTE, 0);
+      nighttime.set(Calendar.HOUR_OF_DAY, 17);
+      nighttime.set(Calendar.MINUTE, 30);
       nighttime.set(Calendar.SECOND, 0);
       nighttime.set(Calendar.MILLISECOND, 0);
 
@@ -206,6 +244,8 @@ public class Data
 
   private void updateState()
   {
+    State old = state;
+
     if (calendar.before(morningtime))
     {
       state = State.Morning;
@@ -231,6 +271,19 @@ public class Data
     {
       state = State.WorkingHours;
     }
+
+    if (state != old)
+    {
+      if (listener != null)
+      {
+        listener.stateChanged(state);
+      }
+    }
+  }
+
+  void setDataListener(DataListener listener)
+  {
+    this.listener = listener;
   }
 }
 

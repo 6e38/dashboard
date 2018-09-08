@@ -11,19 +11,32 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
-public class Surface extends JPanel implements ComponentListener, KeyListener
+public class Surface extends JPanel implements DataListener, ComponentListener, KeyListener
 {
   private boolean isSized;
   private ArrayList<Component> components;
+  private ArrayList<Component> backgrounds;
+  private int backgroundIndex;
   private Data data;
 
-  public Surface()
+  public Surface(String specialFile)
   {
     super();
 
     isSized = false;
-    components = new ArrayList<Component>();
+
     data = new Data();
+    data.setDataListener(this);
+
+    components = new ArrayList<Component>();
+    addComponent(new dashboard.clock.Clock(data));
+
+    backgrounds = new ArrayList<Component>();
+    addBackground(new Background(data));
+    addBackground(new dashboard.thematrix.Matrix(data, specialFile));
+    addBackground(new dashboard.drip.Dripping(data));
+
+    backgroundIndex = 0;
 
     addComponentListener(this);
   }
@@ -33,20 +46,26 @@ public class Surface extends JPanel implements ComponentListener, KeyListener
     components.add(c);
   }
 
+  public void addBackground(Component c)
+  {
+    backgrounds.add(c);
+  }
+
   private void update()
   {
     data.update();
 
+    backgrounds.get(backgroundIndex).update();
+
     for (Component c : components)
     {
-      c.update(data);
+      c.update();
     }
   }
 
   private void draw(Graphics2D g)
   {
-    g.setColor(Color.BLACK);
-    g.fillRect(0, 0, getWidth(), getHeight());
+    backgrounds.get(backgroundIndex).draw(g);
 
     for (Component c : components)
     {
@@ -90,6 +109,11 @@ public class Surface extends JPanel implements ComponentListener, KeyListener
     int h = getHeight();
     Graphics g = getGraphics();
 
+    for (Component c : backgrounds)
+    {
+      c.surfaceSized(w, h, g);
+    }
+
     for (Component c : components)
     {
       c.surfaceSized(w, h, g);
@@ -112,6 +136,16 @@ public class Surface extends JPanel implements ComponentListener, KeyListener
         data.cycleState();
         break;
 
+      case 'b':
+        backgroundIndex = (backgroundIndex + 1) % backgrounds.size();
+        data.setBackground(backgrounds.get(backgroundIndex).getName());
+        break;
+
+      case 'c':
+        Palette p = PaletteFactory.getNext();
+        data.setPalette(p);
+        break;
+
       default:
         break;
     }
@@ -125,6 +159,77 @@ public class Surface extends JPanel implements ComponentListener, KeyListener
   @Override
   public void keyTyped(KeyEvent e)
   {
+  }
+
+  @Override
+  public void stateChanged(Data.State state)
+  {
+    Palette p = PaletteFactory.get(state);
+    data.setPalette(p);
+
+    String s;
+
+    switch (state)
+    {
+      case WorkingHours:
+        s = dashboard.thematrix.Matrix.Name;
+        break;
+
+      case AfterWork:
+        s = dashboard.drip.Dripping.Name;
+        break;
+
+      case BeforeWork:
+        s = Background.Name;
+        break;
+
+      default:
+      case Weekend:
+        s = Background.Name;
+        break;
+
+      case Nighttime:
+        s = Background.Name;
+        break;
+
+      case Morning:
+        s = Background.Name;
+        break;
+    }
+
+    data.setBackground(s);
+  }
+
+  @Override
+  public void paletteChanged(Palette palette)
+  {
+    for (Component c : backgrounds)
+    {
+      c.paletteChanged(palette);
+    }
+
+    for (Component c : components)
+    {
+      c.paletteChanged(palette);
+    }
+  }
+
+  @Override
+  public void backgroundChanged(String background)
+  {
+    backgroundIndex = 0;
+
+    for (Component c : backgrounds)
+    {
+      if (c.getName().equals(background))
+      {
+        return;
+      }
+
+      ++backgroundIndex;
+    }
+
+    backgroundIndex = 0;
   }
 }
 
