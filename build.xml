@@ -35,8 +35,22 @@
     <java classpath="build/jar/Dashboard.jar" classname="dashboard.server.Server" fork="true"/>
   </target>
 
-  <target name="client">
-    <java classpath="build/jar/Dashboard.jar" classname="dashboard.client.Client" fork="true"/>
+  <target name="lock">
+    <java classpath="build/jar/Dashboard.jar" classname="dashboard.client.Client" fork="true">
+      <arg value="lock"/>
+    </java>
+  </target>
+
+  <target name="unlock">
+    <java classpath="build/jar/Dashboard.jar" classname="dashboard.client.Client" fork="true">
+      <arg value="unlock"/>
+    </java>
+  </target>
+
+  <target name="bad">
+    <java classpath="build/jar/Dashboard.jar" classname="dashboard.client.Client" fork="true">
+      <arg value="bad"/>
+    </java>
   </target>
 
 </project>
