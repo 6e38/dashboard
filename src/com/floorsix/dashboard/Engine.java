@@ -2,7 +2,7 @@
  * Copyright (c) 2018 Nathan Jenne
  */
 
-package dashboard;
+package com.floorsix.dashboard;
 
 public class Engine extends Thread
 {

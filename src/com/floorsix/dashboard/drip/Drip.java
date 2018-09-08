@@ -2,7 +2,7 @@
  * Copyright (c) 2018 Nathan Jenne
  */
 
-package dashboard.drip;
+package com.floorsix.dashboard.drip;
 
 import java.awt.geom.Ellipse2D;
 

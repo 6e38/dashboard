@@ -2,11 +2,11 @@
  * Copyright (c) 2018 Nathan Jenne
  */
 
-package dashboard.thematrix;
+package com.floorsix.dashboard.thematrix;
 
-import dashboard.Component;
-import dashboard.Data;
-import dashboard.Palette;
+import com.floorsix.dashboard.Component;
+import com.floorsix.dashboard.Data;
+import com.floorsix.dashboard.Palette;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;

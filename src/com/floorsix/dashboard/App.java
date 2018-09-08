@@ -2,7 +2,7 @@
  * Copyright (c) 2018 Nathan Jenne
  */
 
-package dashboard;
+package com.floorsix.dashboard;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;

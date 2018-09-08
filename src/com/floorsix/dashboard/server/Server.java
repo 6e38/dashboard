@@ -2,9 +2,9 @@
  * Copyright (c) 2018 Nathan Jenne
  */
 
-package dashboard.server;
+package com.floorsix.dashboard.server;
 
-import dashboard.Data;
+import com.floorsix.dashboard.Data;
 import java.io.InputStream;
 import java.io.IOException;
 import java.net.ServerSocket;

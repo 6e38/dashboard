@@ -2,7 +2,7 @@
  * Copyright (c) 2018 Nathan Jenne
  */
 
-package dashboard.thematrix;
+package com.floorsix.dashboard.thematrix;
 
 public interface CollisionAvoidance
 {

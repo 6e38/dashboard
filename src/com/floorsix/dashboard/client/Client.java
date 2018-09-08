@@ -2,7 +2,7 @@
  * Copyright (c) 2018 Nathan Jenne
  */
 
-package dashboard.client;
+package com.floorsix.dashboard.client;
 
 import java.io.IOException;
 import java.io.OutputStream;

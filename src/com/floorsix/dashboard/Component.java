@@ -1,5 +1,5 @@
 
-package dashboard;
+package com.floorsix.dashboard;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;

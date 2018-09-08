@@ -1,5 +1,5 @@
 
-package dashboard;
+package com.floorsix.dashboard;
 
 import java.awt.Color;
 import java.awt.event.ComponentEvent;
@@ -29,12 +29,12 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
     data.setDataListener(this);
 
     components = new ArrayList<Component>();
-    addComponent(new dashboard.clock.Clock(data));
+    addComponent(new com.floorsix.dashboard.clock.Clock(data));
 
     backgrounds = new ArrayList<Component>();
     addBackground(new Background(data));
-    addBackground(new dashboard.thematrix.Matrix(data, specialFile));
-    addBackground(new dashboard.drip.Dripping(data));
+    addBackground(new com.floorsix.dashboard.thematrix.Matrix(data, specialFile));
+    addBackground(new com.floorsix.dashboard.drip.Dripping(data));
 
     backgroundIndex = 0;
 
@@ -172,11 +172,11 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
     switch (state)
     {
       case WorkingHours:
-        s = dashboard.thematrix.Matrix.Name;
+        s = com.floorsix.dashboard.thematrix.Matrix.Name;
         break;
 
       case AfterWork:
-        s = dashboard.drip.Dripping.Name;
+        s = com.floorsix.dashboard.drip.Dripping.Name;
         break;
 
       case BeforeWork:

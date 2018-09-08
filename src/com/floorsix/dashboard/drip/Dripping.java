@@ -2,11 +2,11 @@
  * Copyright (c) 2018 Nathan Jenne
  */
 
-package dashboard.drip;
+package com.floorsix.dashboard.drip;
 
-import dashboard.Component;
-import dashboard.Data;
-import dashboard.Palette;
+import com.floorsix.dashboard.Component;
+import com.floorsix.dashboard.Data;
+import com.floorsix.dashboard.Palette;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;

@@ -1,5 +1,5 @@
 
-package dashboard;
+package com.floorsix.dashboard;
 
 class PaletteFactory
 {

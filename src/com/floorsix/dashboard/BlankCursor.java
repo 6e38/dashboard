@@ -2,7 +2,7 @@
  * Copyright (c) 2018 Nathan Jenne
  */
 
-package dashboard;
+package com.floorsix.dashboard;
 
 import java.awt.Cursor;
 import java.awt.image.BufferedImage;

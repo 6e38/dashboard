@@ -1,11 +1,5 @@
 <project>
 
-  <!-- This presetdef doesn't really work because it complains
-       when the jar target is attempted. -->
-  <presetdef name=".javac">
-    <javac includeantruntime="false" />
-  </presetdef>
-
   <target name="clean">
     <delete dir="build"/>
   </target>
@@ -22,7 +16,7 @@
       <fileset dir="build/classes"/>
       <fileset dir="res"/>
       <manifest>
-        <attribute name="Main-Class" value="dashboard.App"/>
+        <attribute name="Main-Class" value="com.floorsix.dashboard.App"/>
       </manifest>
     </jar>
   </target>
@@ -32,23 +26,23 @@
   </target>
 
   <target name="server">
-    <java classpath="build/jar/Dashboard.jar" classname="dashboard.server.Server" fork="true"/>
+    <java classpath="build/jar/Dashboard.jar" classname="com.floorsix.dashboard.server.Server" fork="true"/>
   </target>
 
   <target name="lock">
-    <java classpath="build/jar/Dashboard.jar" classname="dashboard.client.Client" fork="true">
+    <java classpath="build/jar/Dashboard.jar" classname="com.floorsix.dashboard.client.Client" fork="true">
       <arg value="lock"/>
     </java>
   </target>
 
   <target name="unlock">
-    <java classpath="build/jar/Dashboard.jar" classname="dashboard.client.Client" fork="true">
+    <java classpath="build/jar/Dashboard.jar" classname="com.floorsix.dashboard.client.Client" fork="true">
       <arg value="unlock"/>
     </java>
   </target>
 
   <target name="bad">
-    <java classpath="build/jar/Dashboard.jar" classname="dashboard.client.Client" fork="true">
+    <java classpath="build/jar/Dashboard.jar" classname="com.floorsix.dashboard.client.Client" fork="true">
       <arg value="bad"/>
     </java>
   </target>
