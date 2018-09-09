@@ -1,19 +1,44 @@
-<project>
+<project default="compile">
+
+  <property name="srcpath" value="src"/>
+  <property name="buildpath" value="build"/>
+  <property name="classpath" value="${buildpath}/classes"/>
+  <property name="debugpath" value="${buildpath}/debug"/>
+  <property name="jarpath" value="${buildpath}/jar"/>
+  <property name="jarfile" value="dashboard.jar"/>
+
+  <property name="build.sysclasspath" value="ignore"/>
 
   <target name="clean">
-    <delete dir="build"/>
+    <delete dir="${buildpath}"/>
   </target>
 
-  <target name="compile">
-    <mkdir dir="build/classes"/>
-    <javac srcdir="src" destdir="build/classes" includeantruntime="false"/>
+  <target name="submodules">
+    <!--
+    <ant antfile="json-java/build.xml" useNativeBasedir="true" inheritAll="false">
+      <property name="buildpath" value="../${buildpath}"/>
+      <target name="compile"/>
+      <target name="debug"/>
+    </ant>
+    -->
+  </target>
+
+  <target name="compile" depends="submodules">
+    <mkdir dir="${classpath}"/>
+    <javac srcdir="${srcpath}" destdir="${classpath}">
+    </javac>
+  </target>
+
+  <target name="debug" depends="submodules">
+    <mkdir dir="${debugpath}"/>
+    <javac srcdir="${srcpath}" destdir="${debugpath}" debug="on" debuglevel="lines,vars,source"/>
   </target>
 
   <target name="jar" depends="compile">
-    <mkdir dir="build/jar"/>
-    <delete file="build/jar/Dashboard.jar"/>
-    <jar destfile="build/jar/Dashboard.jar">
-      <fileset dir="build/classes"/>
+    <mkdir dir="${jarpath}"/>
+    <delete file="${jarpath}/${jarfile}"/>
+    <jar destfile="${jarpath}/${jarfile}">
+      <fileset dir="${classpath}"/>
       <fileset dir="res"/>
       <manifest>
         <attribute name="Main-Class" value="com.floorsix.dashboard.App"/>
@@ -22,27 +47,27 @@
   </target>
 
   <target name="run" depends="jar">
-    <java jar="build/jar/Dashboard.jar" fork="true"/>
+    <java jar="${jarpath}/${jarfile}" fork="true"/>
   </target>
 
   <target name="server">
-    <java classpath="build/jar/Dashboard.jar" classname="com.floorsix.dashboard.server.Server" fork="true"/>
+    <java classpath="${jarpath}/${jarfile}" classname="com.floorsix.dashboard.server.Server" fork="true"/>
   </target>
 
   <target name="lock">
-    <java classpath="build/jar/Dashboard.jar" classname="com.floorsix.dashboard.client.Client" fork="true">
+    <java classpath="${jarpath}/${jarfile}" classname="com.floorsix.dashboard.client.Client" fork="true">
       <arg value="lock"/>
     </java>
   </target>
 
   <target name="unlock">
-    <java classpath="build/jar/Dashboard.jar" classname="com.floorsix.dashboard.client.Client" fork="true">
+    <java classpath="${jarpath}/${jarfile}" classname="com.floorsix.dashboard.client.Client" fork="true">
       <arg value="unlock"/>
     </java>
   </target>
 
   <target name="bad">
-    <java classpath="build/jar/Dashboard.jar" classname="com.floorsix.dashboard.client.Client" fork="true">
+    <java classpath="${jarpath}/${jarfile}" classname="com.floorsix.dashboard.client.Client" fork="true">
       <arg value="bad"/>
     </java>
   </target>
