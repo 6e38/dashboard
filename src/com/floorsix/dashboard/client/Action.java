@@ -4,9 +4,11 @@
 
 package com.floorsix.dashboard.client;
 
-public interface Action
+interface Action
 {
   String getCommandName();
-  void doCommand();
+  String getUsage();
+  String getDescription();
+  void doCommand(String[] args);
 }
 

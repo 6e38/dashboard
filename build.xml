@@ -63,4 +63,9 @@
     </java>
   </target>
 
+  <target name="wrong">
+    <java classpath="${jarpath}/${jarfile}" classname="com.floorsix.dashboard.client.Client" fork="true">
+    </java>
+  </target>
+
 </project>

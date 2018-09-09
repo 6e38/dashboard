@@ -4,9 +4,9 @@
 
 package com.floorsix.dashboard.client;
 
+import com.floorsix.preferences.Preferences;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.prefs.Preferences;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
@@ -15,20 +15,14 @@ public class Client
   private static final Action[] actions = {
     new LockAction(),
     new UnlockAction(),
+    new SetHostAction(),
+    new GetHostAction(),
     // show log
-    // set ip
   };
 
   public static void main(String[] args)
   {
-    //Preferences prefs = Preferences.userNodeForPackage(Client.class);
-    //System.out.println("Prefs is: " + prefs.toString());
-    System.out.println(">>> " + System.getProperty("os.name"));
-    System.out.println(">>> " + System.getProperty("user.home"));
-    System.out.println(">>> " + Client.class.getName());
-    System.out.println(">>> " + Client.class.getPackage());
-
-    if (args.length == 1)
+    if (args.length >= 1)
     {
       boolean foundCommand = false;
 
@@ -37,13 +31,19 @@ public class Client
         if (args[0].equals(a.getCommandName()))
         {
           foundCommand = true;
-          a.doCommand();
+          a.doCommand(args);
         }
       }
 
       if (!foundCommand)
       {
-        System.out.println("Failed to find command :(");
+        System.out.println("\nUnknown command: " + args[0]);
+        System.out.println("\nCommands:");
+
+        for (Action a : actions)
+        {
+          System.out.println(String.format("  %-30s %s", a.getUsage(), a.getDescription()));
+        }
       }
     }
     else
@@ -52,10 +52,34 @@ public class Client
     }
   }
 
-  private void sendPacket() throws IOException
+  private Preferences prefs;
+
+  Client()
+  {
+    prefs = Preferences.getUserPreferences(Client.class);
+  }
+
+  void setHost(String host, int port)
+  {
+    prefs.setString("host", host);
+    prefs.setDouble("port", port);
+    prefs.commit();
+  }
+
+  String getHost()
+  {
+    return prefs.getString("host", "localhost");
+  }
+
+  int getPort()
+  {
+    return (int)prefs.getDouble("port", 5005);
+  }
+
+  void sendPacket() throws IOException
   {
     SSLSocketFactory factory = (SSLSocketFactory)SSLSocketFactory.getDefault();
-    SSLSocket sock = (SSLSocket)factory.createSocket("localhost", 5005);
+    SSLSocket sock = (SSLSocket)factory.createSocket(getHost(), getPort());
 
     sock.setEnabledCipherSuites(factory.getSupportedCipherSuites());
 

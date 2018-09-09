@@ -4,16 +4,24 @@
 
 package com.floorsix.dashboard.client;
 
-public class LockAction implements Action
+class LockAction implements Action
 {
-  public LockAction() {}
-
   public String getCommandName()
   {
     return "lock";
   }
 
-  public void doCommand()
+  public String getUsage()
+  {
+    return "lock";
+  }
+
+  public String getDescription()
+  {
+    return "Sends a lock info packet to the host";
+  }
+
+  public void doCommand(String[] args)
   {
     System.out.println("LOCKED!?");
   }

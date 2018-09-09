@@ -4,16 +4,24 @@
 
 package com.floorsix.dashboard.client;
 
-public class UnlockAction implements Action
+class UnlockAction implements Action
 {
-  public UnlockAction() {}
-
   public String getCommandName()
   {
     return "unlock";
   }
 
-  public void doCommand()
+  public String getUsage()
+  {
+    return "unlock";
+  }
+
+  public String getDescription()
+  {
+    return "Sends an unlock info packet to the host";
+  }
+
+  public void doCommand(String[] args)
   {
     System.out.println("UNLOCK!");
   }
