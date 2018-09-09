@@ -1,7 +1,7 @@
 <project default="compile">
 
   <property name="srcpath" value="src"/>
-  <property name="buildpath" value="build"/>
+  <property name="buildpath" value="${basedir}/build"/>
   <property name="classpath" value="${buildpath}/classes"/>
   <property name="debugpath" value="${buildpath}/debug"/>
   <property name="jarpath" value="${buildpath}/jar"/>
@@ -14,24 +14,15 @@
   </target>
 
   <target name="submodules">
-    <!--
-    <ant antfile="json-java/build.xml" useNativeBasedir="true" inheritAll="false">
-      <property name="buildpath" value="../${buildpath}"/>
+    <ant antfile="preferences-java/build.xml" useNativeBasedir="true">
       <target name="compile"/>
-      <target name="debug"/>
     </ant>
-    -->
   </target>
 
   <target name="compile" depends="submodules">
     <mkdir dir="${classpath}"/>
     <javac srcdir="${srcpath}" destdir="${classpath}">
     </javac>
-  </target>
-
-  <target name="debug" depends="submodules">
-    <mkdir dir="${debugpath}"/>
-    <javac srcdir="${srcpath}" destdir="${debugpath}" debug="on" debuglevel="lines,vars,source"/>
   </target>
 
   <target name="jar" depends="compile">
