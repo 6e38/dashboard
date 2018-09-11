@@ -5,6 +5,7 @@
 package com.floorsix.dashboard.server;
 
 import com.floorsix.dashboard.Data;
+import com.floorsix.json.*;
 import java.io.InputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -15,28 +16,58 @@ import javax.net.ssl.SSLServerSocketFactory;
 public class Server implements Runnable
 {
   private Data data;
+  private boolean running;
+  private boolean singleConnection;
 
-  public Server(Data d)
+  private Server(Data d)
   {
     data = d;
+    running = false;
+    singleConnection = false;
   }
 
   public void run()
   {
-    SSLServerSocketFactory factory = (SSLServerSocketFactory)SSLServerSocketFactory.getDefault();
+    running = true;
 
-    try
+    while (running)
     {
-      SSLServerSocket server = (SSLServerSocket)factory.createServerSocket(5005);
+      SSLServerSocketFactory factory = (SSLServerSocketFactory)SSLServerSocketFactory.getDefault();
 
-      server.setEnabledCipherSuites(factory.getSupportedCipherSuites());
+      try
+      {
+        SSLServerSocket server = (SSLServerSocket)factory.createServerSocket(5005);
 
-      accept(server);
+        String[] suites = {
+          "TLS_ECDH_anon_WITH_AES_128_CBC_SHA",
+          "TLS_ECDH_anon_WITH_NULL_SHA",
+        };
+        server.setEnabledCipherSuites(suites);
+
+        /*
+        for (String s : factory.getSupportedCipherSuites())
+        {
+          System.out.println(s);
+        }
+        */
+
+        accept(server);
+      }
+      catch (IOException e)
+      {
+        System.out.println("Failed to create server socket");
+      }
+
+      if (singleConnection)
+      {
+        break;
+      }
     }
-    catch (IOException e)
-    {
-      System.out.println("Failed to create server socket");
-    }
+  }
+
+  public void stop()
+  {
+    running = false;
   }
 
   private void accept(ServerSocket server)
@@ -65,23 +96,75 @@ public class Server implements Runnable
 
   private void read(InputStream in)
   {
+    StringBuilder s = new StringBuilder();
+
     try
     {
       while (true)
       {
         int c = in.read();
-        System.out.print((char)c);
+        s.append((char)c);
       }
     }
     catch (IOException e)
     {
-      System.out.println("Error reading byte from client");
     }
+
+    parsePacket(s.toString());
+  }
+
+  private void parsePacket(String pkt)
+  {
+    try
+    {
+      JsonObject object = JsonParser.parse(pkt);
+      handlePacket(object);
+    }
+    catch (InvalidJsonException e)
+    {
+      System.out.println("Parsing error? " + e);
+    }
+  }
+
+  private void handlePacket(JsonObject object)
+  {
+    Json json = object.get("type");
+    if (json != null && json instanceof JsonString)
+    {
+      String type = ((JsonString)json).get();
+      if (type.equals("lock"))
+      {
+        json = object.get("timestamp");
+        if (json != null && json instanceof JsonNumber)
+        {
+          long timestamp = ((JsonNumber)json).getLong();
+          data.lockEvent(timestamp);
+        }
+      }
+      else if (type.equals("unlock"))
+      {
+        json = object.get("timestamp");
+        if (json != null && json instanceof JsonNumber)
+        {
+          long timestamp = ((JsonNumber)json).getLong();
+          data.unlockEvent(timestamp);
+        }
+      }
+    }
+  }
+
+  public static void launchServer(Data data)
+  {
+    Server server = new Server(data);
+    Thread t = new Thread(server);
+    t.start();
   }
 
   public static void main(String[] args)
   {
-    Thread t = new Thread(new Server(new Data()));
+    Server server = new Server(new Data());
+    server.singleConnection = true;
+    Thread t = new Thread(server);
     t.start();
 
     try
@@ -92,8 +175,6 @@ public class Server implements Runnable
     {
       System.out.println("Error joining thread");
     }
-
-    System.out.println("Exit");
   }
 }
 

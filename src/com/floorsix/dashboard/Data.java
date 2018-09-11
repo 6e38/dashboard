@@ -6,6 +6,7 @@ package com.floorsix.dashboard;
 
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
+import java.util.List;
 
 public class Data
 {
@@ -47,6 +48,8 @@ public class Data
   private String background;
   private Palette palette;
 
+  private PresenceData presenceData;
+
   public Data()
   {
     dayOfYear = -1;
@@ -59,6 +62,8 @@ public class Data
     setPalette(PaletteFactory.get());
 
     state = State.Morning;
+
+    presenceData = new PresenceData();
   }
 
   public void update()
@@ -227,6 +232,8 @@ public class Data
       morningtime.set(Calendar.MINUTE, 0);
       morningtime.set(Calendar.SECOND, 0);
       morningtime.set(Calendar.MILLISECOND, 0);
+
+      presenceData.dayOfYearChanged();
     }
   }
 
@@ -284,6 +291,21 @@ public class Data
   void setDataListener(DataListener listener)
   {
     this.listener = listener;
+  }
+
+  public void lockEvent(long timestamp)
+  {
+    presenceData.lockEvent(timestamp);
+  }
+
+  public void unlockEvent(long timestamp)
+  {
+    presenceData.unlockEvent(timestamp);
+  }
+
+  public List<PresenceEvent> getPresenceEvents()
+  {
+    return presenceData.getPresenceEvents();
   }
 }
 

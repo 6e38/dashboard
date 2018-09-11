@@ -45,26 +45,9 @@
     <java classpath="${jarpath}/${jarfile}" classname="com.floorsix.dashboard.server.Server" fork="true"/>
   </target>
 
-  <target name="lock">
+  <target name="client">
     <java classpath="${jarpath}/${jarfile}" classname="com.floorsix.dashboard.client.Client" fork="true">
-      <arg value="lock"/>
-    </java>
-  </target>
-
-  <target name="unlock">
-    <java classpath="${jarpath}/${jarfile}" classname="com.floorsix.dashboard.client.Client" fork="true">
-      <arg value="unlock"/>
-    </java>
-  </target>
-
-  <target name="bad">
-    <java classpath="${jarpath}/${jarfile}" classname="com.floorsix.dashboard.client.Client" fork="true">
-      <arg value="bad"/>
-    </java>
-  </target>
-
-  <target name="wrong">
-    <java classpath="${jarpath}/${jarfile}" classname="com.floorsix.dashboard.client.Client" fork="true">
+      <arg value="${command}"/>
     </java>
   </target>
 

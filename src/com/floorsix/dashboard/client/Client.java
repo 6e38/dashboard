@@ -76,16 +76,28 @@ public class Client
     return (int)prefs.getDouble("port", 5005);
   }
 
-  void sendPacket() throws IOException
+  void sendPacket(String pkt)
   {
-    SSLSocketFactory factory = (SSLSocketFactory)SSLSocketFactory.getDefault();
-    SSLSocket sock = (SSLSocket)factory.createSocket(getHost(), getPort());
+    try
+    {
+      SSLSocketFactory factory = (SSLSocketFactory)SSLSocketFactory.getDefault();
+      SSLSocket sock = (SSLSocket)factory.createSocket(getHost(), getPort());
 
-    sock.setEnabledCipherSuites(factory.getSupportedCipherSuites());
+      String[] suites = {
+        "TLS_ECDH_anon_WITH_AES_128_CBC_SHA",
+        "TLS_ECDH_anon_WITH_NULL_SHA",
+      };
+      sock.setEnabledCipherSuites(suites);
+      //sock.setEnabledCipherSuites(factory.getSupportedCipherSuites());
 
-    OutputStream out = sock.getOutputStream();
+      OutputStream out = sock.getOutputStream();
 
-    out.write("This is the song that never ends\n".getBytes());
+      out.write(pkt.getBytes());
+    }
+    catch (IOException e)
+    {
+      System.out.println("Failed to send pkt\n" + e);
+    }
   }
 }
 

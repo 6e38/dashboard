@@ -4,6 +4,9 @@
 
 package com.floorsix.dashboard.client;
 
+import com.floorsix.json.JsonObject;
+import java.util.Date;
+
 class UnlockAction implements Action
 {
   public String getCommandName()
@@ -23,7 +26,14 @@ class UnlockAction implements Action
 
   public void doCommand(String[] args)
   {
-    System.out.println("UNLOCK!");
+    Date date = new Date();
+
+    JsonObject object = new JsonObject(null);
+    object.set("type", "unlock");
+    object.set("timestamp", date.getTime());
+
+    Client client = new Client();
+    client.sendPacket(object.toString());
   }
 }
 
