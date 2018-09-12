@@ -6,29 +6,20 @@ package com.floorsix.dashboard;
 
 public class PresenceEvent
 {
-  public long unlock;
-  public long lock;
+  public enum Type {
+    Lock,
+    Unlock,
+    Logon,
+    Logoff,
+  };
 
-  public PresenceEvent(long unlock, long lock)
-  {
-    this.unlock = unlock;
-    this.lock = lock;
-  }
+  public Type type;
+  public long timestamp;
 
-  public PresenceEvent(long unlock)
+  public PresenceEvent(Type type, long timestamp)
   {
-    this.unlock = unlock;
-    this.lock = 0;
-  }
-
-  public boolean isLockSet()
-  {
-    return lock != 0;
-  }
-
-  public boolean isUnlockSet()
-  {
-    return unlock != 0;
+    this.type = type;
+    this.timestamp = timestamp;
   }
 }
 

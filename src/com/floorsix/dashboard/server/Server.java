@@ -30,38 +30,38 @@ public class Server implements Runnable
   {
     running = true;
 
-    while (running)
+    SSLServerSocketFactory factory = (SSLServerSocketFactory)SSLServerSocketFactory.getDefault();
+
+    try
     {
-      SSLServerSocketFactory factory = (SSLServerSocketFactory)SSLServerSocketFactory.getDefault();
+      SSLServerSocket server = (SSLServerSocket)factory.createServerSocket(5005);
 
-      try
+      String[] suites = {
+        "TLS_ECDH_anon_WITH_AES_128_CBC_SHA",
+        "TLS_ECDH_anon_WITH_NULL_SHA",
+      };
+      server.setEnabledCipherSuites(suites);
+
+      /*
+      for (String s : factory.getSupportedCipherSuites())
       {
-        SSLServerSocket server = (SSLServerSocket)factory.createServerSocket(5005);
+        System.out.println(s);
+      }
+      */
 
-        String[] suites = {
-          "TLS_ECDH_anon_WITH_AES_128_CBC_SHA",
-          "TLS_ECDH_anon_WITH_NULL_SHA",
-        };
-        server.setEnabledCipherSuites(suites);
-
-        /*
-        for (String s : factory.getSupportedCipherSuites())
-        {
-          System.out.println(s);
-        }
-        */
-
+      while (running)
+      {
         accept(server);
-      }
-      catch (IOException e)
-      {
-        System.out.println("Failed to create server socket");
-      }
 
-      if (singleConnection)
-      {
-        break;
+        if (singleConnection)
+        {
+          break;
+        }
       }
+    }
+    catch (IOException e)
+    {
+      System.out.println("Failed to create server socket");
     }
   }
 

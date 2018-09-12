@@ -37,6 +37,7 @@ public class Data
   private Calendar nighttime;
   private Calendar morningtime;
   private DateFormatSymbols dfs;
+  private long startOfDay;
 
   private int dayOfYear;
 
@@ -205,10 +206,24 @@ public class Data
     return isState(State.Nighttime);
   }
 
+  public long getStartOfDay()
+  {
+    return startOfDay;
+  }
+
   private void updateDayOfYear()
   {
     if (calendar.get(Calendar.DAY_OF_YEAR) != dayOfYear)
     {
+      dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+
+      Calendar c = (Calendar)calendar.clone();
+      c.set(Calendar.HOUR_OF_DAY, 0);
+      c.set(Calendar.MINUTE, 0);
+      c.set(Calendar.SECOND, 0);
+      c.set(Calendar.MILLISECOND, 0);
+      startOfDay = c.getTime().getTime();
+
       fivepm = (Calendar)calendar.clone();
       fivepm.set(Calendar.HOUR_OF_DAY, 17);
       fivepm.set(Calendar.MINUTE, 0);

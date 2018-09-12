@@ -39,6 +39,8 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
     backgroundIndex = 0;
 
     addComponentListener(this);
+
+    com.floorsix.dashboard.server.Server.launchServer(data);
   }
 
   public void addComponent(Component c)
