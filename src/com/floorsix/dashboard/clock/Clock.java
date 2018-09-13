@@ -165,20 +165,18 @@ public class Clock implements Component
     List<PresenceEvent> list = data.getPresenceEvents();
     final int hoursInBar = 11;
 
-    int barWidth = getWidth() * 9 / 10;
-    int barHeight = 10;
-    int barX = getWidth() / 2 - barWidth / 2;
-    int barY = y;
+    float barWidth = getWidth() * 9 / 10;
+    float barHeight = 10;
+    float barX = getWidth() / 2 - barWidth / 2;
+    float barY = y;
+
+    g.setClip((int)barX, (int)barY, (int)barWidth, (int)barHeight);
 
     g.setColor(palette.secondary);
 
     long startOfDay = data.getStartOfDay();
-    long sevenam = startOfDay + 5 * 60 * 60 * 1000;
-    long sixpm = startOfDay + 7 * 60 * 60 * 1000;
-    /*
     long sevenam = startOfDay + 7 * 60 * 60 * 1000;
     long sixpm = startOfDay + 18 * 60 * 60 * 1000;
-    */
     long duration = sixpm - sevenam;
 
     PresenceEvent last = null;
@@ -187,24 +185,13 @@ public class Clock implements Component
     {
       if (last != null)
       {
-        if (e.type == Type.Lock)
+        if (last.type == Type.Unlock)
         {
-          if (last.type == Type.Unlock)
-          {
-            float p = (float)(last.timestamp - sevenam) / (float)duration;
-            float xf = p * (float)barWidth;
-            int x = barX + (int)xf;
+          float x = (float)(last.timestamp - sevenam) / (float)duration * barWidth + barX;
+          float w = (float)(e.timestamp - last.timestamp) / (float)duration * barWidth;
+          w = w < 1 ? 1 : w;
 
-            p = (float)(e.timestamp - last.timestamp) / (float)duration;
-            float wf = p * (float)barWidth;
-            int w = (int)wf;
-            if (w == 0)
-            {
-              w = 1;
-            }
-
-            g.fillRect(x, barY, w, barHeight);
-          }
+          g.fillRect((int)x, (int)barY, (int)w, (int)barHeight);
         }
       }
 
@@ -213,31 +200,24 @@ public class Clock implements Component
 
     if (last != null && last.type == Type.Unlock)
     {
-      float p = (float)(last.timestamp - sevenam) / (float)duration;
-      float xf = p * (float)barWidth;
-      int x = barX + (int)xf;
+      float x = (float)(last.timestamp - sevenam) / (float)duration * barWidth + barX;
+      float w = (float)(Calendar.getInstance().getTime().getTime() - last.timestamp) / (float)duration * barWidth;
+      w = w < 1 ? 1 : w;
 
-      p = (float)(Calendar.getInstance().getTime().getTime() - last.timestamp) / (float)duration;
-      float wf = p * (float)barWidth;
-      int w = (int)wf;
-      if (w == 0)
-      {
-        w = 1;
-      }
-
-      g.fillRect(x, barY, w, barHeight);
+      g.fillRect((int)x, (int)barY, (int)w, (int)barHeight);
     }
 
-    g.setColor(palette.primary);
-    g.drawRect(barX, barY, barWidth, barHeight);
-    int x1 = barX + barWidth / hoursInBar;
-    g.drawLine(x1, barY + barHeight, x1, barY + barHeight * 2); // 8am
-    x1 = barX + barWidth * 10 / hoursInBar;
-    g.drawLine(x1, barY + barHeight, x1, barY + barHeight * 2); // 5pm
-    x1 = barX + barWidth * 5 / hoursInBar;
-    g.drawLine(x1, barY + barHeight, x1, barY + barHeight + barHeight / 2); // noon
-    x1 = barX + barWidth * 6 / hoursInBar;
-    g.drawLine(x1, barY + barHeight, x1, barY + barHeight + barHeight / 2); // 1pm
+    g.setClip(null);
+
+    g.drawRect((int)barX, (int)barY, (int)barWidth, (int)barHeight);
+    float x = barX + barWidth / hoursInBar;
+    g.drawLine((int)x, (int)(barY + barHeight), (int)x, (int)(barY + barHeight * 2));
+    x = barX + barWidth * 10 / hoursInBar;
+    g.drawLine((int)x, (int)(barY + barHeight), (int)x, (int)(barY + barHeight * 2));
+    x = barX + barWidth * 5 / hoursInBar;
+    g.drawLine((int)x, (int)(barY + barHeight), (int)x, (int)(barY + barHeight * 1.3));
+    x = barX + barWidth * 6 / hoursInBar;
+    g.drawLine((int)x, (int)(barY + barHeight), (int)x, (int)(barY + barHeight * 1.3));
   }
 
   @Override

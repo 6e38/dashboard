@@ -4,8 +4,8 @@ package com.floorsix.dashboard;
 class PaletteFactory
 {
   private static final Palette morning = new Palette(0x555555, 0x555555, 0x000000);
-  private static final Palette beforeWork = new Palette(0x5555ff, 0x0000bb, 0x000033);
-  private static final Palette working = new Palette(0x00ff00, 0xbb0000, 0x000000);
+  private static final Palette beforeWork = new Palette(0x5555ff, 0x333388, 0x000033);
+  private static final Palette working = new Palette(0x00ff00, 0x008800, 0x000000);
   private static final Palette afterWork = new Palette(0xdd0000, 0xbb0000, 0x330000);
   private static final Palette nighttime = new Palette(0x555555, 0x555555, 0x000000);
   private static final Palette weekend = new Palette(0x333333, 0x333333, 0x000000);
