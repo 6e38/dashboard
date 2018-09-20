@@ -1,3 +1,6 @@
+/*
+ * Copyright (c) 2018 Nathan Jenne
+ */
 
 package com.floorsix.dashboard;
 
@@ -35,6 +38,7 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
     addBackground(new Background(data));
     addBackground(new com.floorsix.dashboard.thematrix.Matrix(data, specialFile));
     addBackground(new com.floorsix.dashboard.drip.Dripping(data));
+    addBackground(new com.floorsix.dashboard.starfield.Starfield(data));
 
     backgroundIndex = 0;
 
