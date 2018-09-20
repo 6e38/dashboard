@@ -15,6 +15,8 @@ class Star
   private double y;
   private double rate;
   private long then;
+  private boolean named;
+  private String name;
 
   Star()
   {
@@ -22,6 +24,8 @@ class Star
     height = 0;
 
     then = System.currentTimeMillis();
+
+    named = false;
   }
 
   void surfaceSized(double width, double height)
@@ -33,9 +37,13 @@ class Star
 
   void reset()
   {
-    size = 1;
+    rate = Math.random() * 100 + 10;
+
+    named = false;
 
     double r = Math.random();
+
+    size = 1;
 
     if (r < 0.01)
     {
@@ -48,7 +56,41 @@ class Star
 
     x = width + size;
     y = Math.random() * height;
-    rate = Math.random() * 100 + 10;
+
+    if (Math.random() < 0.0001)
+    {
+      final String[] Names = {
+        "proxima centauri",
+        "polaris",
+        "merope",
+        "izar",
+        "gacrux",
+        "enif",
+        "diphda",
+        "cursa",
+        "bellatrix",
+        "alula borealis",
+        "fulu",
+        "ogma",
+        "phact",
+        "sarin",
+        "vega",
+        "yed prior",
+        "zhang",
+      };
+      named = true;
+      name = Names[(int)(Math.random() * (double)Names.length)];
+
+      if (y < 50) // prevent named stars from running off the top
+      {
+        y += 50;
+      }
+
+      while (rate > 50) // slow down named stars
+      {
+        rate -= 40;
+      }
+    }
   }
 
   synchronized void update()
@@ -61,7 +103,10 @@ class Star
 
     if (x < -size * 2)
     {
-      reset();
+      if (!named || x < -400)
+      {
+        reset();
+      }
     }
 
     then = now;
@@ -70,6 +115,15 @@ class Star
   synchronized void draw(Graphics2D g)
   {
     g.fillRect((int)x, (int)y, (int)size, (int)size);
+
+    if (named)
+    {
+      int x2 = (int)x + 18;
+      int y2 = (int)y - 18;
+
+      g.drawLine((int)x + 2, (int)y - 2, x2, y2);
+      g.drawString(name, x2 + 2, y2 + 2);
+    }
   }
 }
 
