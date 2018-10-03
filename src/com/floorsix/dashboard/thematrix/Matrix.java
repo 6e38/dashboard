@@ -61,7 +61,7 @@ public class Matrix implements CollisionAvoidance, Component
 
     g.setFont(mainFont);
     FontMetrics metrics = g.getFontMetrics();
-    charWidth = metrics.charWidth('A');
+    charWidth = metrics.charWidth('\u4e00');
     charHeight = metrics.getHeight();
 
     cols = width / charWidth;
