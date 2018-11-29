@@ -39,6 +39,7 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
     addBackground(new com.floorsix.dashboard.thematrix.Matrix(data, specialFile));
     addBackground(new com.floorsix.dashboard.drip.Dripping(data));
     addBackground(new com.floorsix.dashboard.starfield.Starfield(data));
+    addBackground(new com.floorsix.dashboard.snow.Snowfield(data));
 
     backgroundIndex = 0;
 
