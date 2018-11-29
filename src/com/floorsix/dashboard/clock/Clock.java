@@ -12,12 +12,13 @@ import com.floorsix.dashboard.PresenceEvent.Type;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.FontMetrics;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.io.InputStream;
+import java.awt.geom.AffineTransform;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.List;
 
@@ -106,6 +107,8 @@ public class Clock implements Component
   @Override
   public void draw(Graphics2D g)
   {
+    AffineTransform save = g.getTransform();
+
     if (data.isBeforeWork() || data.isAfterWork() || data.isWorkingHours())
     {
       g.setColor(palette.background);
@@ -158,6 +161,8 @@ public class Clock implements Component
     y += metrics.getDescent();
 
     drawPresence(g, y);
+
+    g.setTransform(save);
   }
 
   private void drawPresence(Graphics2D g, int y)

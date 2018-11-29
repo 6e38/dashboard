@@ -9,5 +9,6 @@ interface DataListener
   void stateChanged(Data.State state);
   void paletteChanged(Palette palette);
   void backgroundChanged(String background);
+  void componentChanged(String component);
 }
 

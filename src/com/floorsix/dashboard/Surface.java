@@ -20,6 +20,7 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
   private ArrayList<Component> components;
   private ArrayList<Component> backgrounds;
   private int backgroundIndex;
+  private int componentIndex;
   private Data data;
 
   public Surface(String specialFile)
@@ -33,6 +34,7 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
 
     components = new ArrayList<Component>();
     addComponent(new com.floorsix.dashboard.clock.Clock(data));
+    addComponent(new com.floorsix.dashboard.clock.CornerClock(data));
 
     backgrounds = new ArrayList<Component>();
     addBackground(new Background(data));
@@ -42,6 +44,7 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
     addBackground(new com.floorsix.dashboard.snow.Snowfield(data));
 
     backgroundIndex = 0;
+    componentIndex = 0;
 
     addComponentListener(this);
 
@@ -64,20 +67,14 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
 
     backgrounds.get(backgroundIndex).update();
 
-    for (Component c : components)
-    {
-      c.update();
-    }
+    components.get(componentIndex).update();
   }
 
   private void draw(Graphics2D g)
   {
     backgrounds.get(backgroundIndex).draw(g);
 
-    for (Component c : components)
-    {
-      c.draw(g);
-    }
+    components.get(componentIndex).draw(g);
   }
 
   @Override
@@ -151,6 +148,11 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
       case 'c':
         Palette p = PaletteFactory.getNext();
         data.setPalette(p);
+        break;
+
+      case 'C':
+        componentIndex = (componentIndex + 1) % components.size();
+        data.setComponent(components.get(componentIndex).getName());
         break;
 
       default:
@@ -237,6 +239,24 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
     }
 
     backgroundIndex = 0;
+  }
+
+  @Override
+  public void componentChanged(String component)
+  {
+    componentIndex = 0;
+
+    for (Component c : components)
+    {
+      if (c.getName().equals(component))
+      {
+        return;
+      }
+
+      ++componentIndex;
+    }
+
+    componentIndex = 0;
   }
 }
 

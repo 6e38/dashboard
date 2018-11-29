@@ -47,6 +47,7 @@ public class Data
   private String remainingString;
 
   private String background;
+  private String component;
   private Palette palette;
 
   private PresenceData presenceData;
@@ -60,6 +61,7 @@ public class Data
     dfs = new DateFormatSymbols();
 
     setBackground(Background.Name);
+    setComponent("clock");
     setPalette(PaletteFactory.get());
 
     state = State.Morning;
@@ -97,6 +99,11 @@ public class Data
     return background;
   }
 
+  public String getComponent()
+  {
+    return component;
+  }
+
   public void setBackground(String bg)
   {
     background = bg;
@@ -104,6 +111,16 @@ public class Data
     if (listener != null)
     {
       listener.backgroundChanged(background);
+    }
+  }
+
+  public void setComponent(String component)
+  {
+    this.component = component;
+
+    if (listener != null)
+    {
+      listener.componentChanged(component);
     }
   }
 
