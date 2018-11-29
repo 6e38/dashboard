@@ -15,11 +15,20 @@ class Snow
   private double y;
   private double rate;
   private long then;
+  private double dx;
+  private double sineMag;
+  private double sineTime;
+  private double sinePeriod;
 
   Snow()
   {
     width = 0;
     height = 0;
+
+    dx = 0;
+    sineMag = 5;
+    sinePeriod = .5 + (Math.random() * .2 - .1);
+    sineTime = Math.random() * Math.PI * 2;
 
     then = System.currentTimeMillis();
   }
@@ -65,12 +74,19 @@ class Snow
       reset();
     }
 
+    sineTime += dt;
+    if (sineTime > 1 / sinePeriod)
+    {
+      sineTime -= 1 / sinePeriod;
+    }
+    dx = sineMag * Math.sin(sineTime * Math.PI * 2 * sinePeriod);
+
     then = now;
   }
 
   synchronized void draw(Graphics2D g)
   {
-    g.fillRect((int)x, (int)y, (int)size, (int)size);
+    g.fillRect((int)(x + dx), (int)y, (int)size, (int)size);
   }
 }
 
