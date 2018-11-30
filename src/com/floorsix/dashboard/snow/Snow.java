@@ -26,7 +26,7 @@ class Snow
     height = 0;
 
     dx = 0;
-    sineMag = 5;
+    sineMag = 2;
     sinePeriod = .5 + (Math.random() * .2 - .1);
     sineTime = Math.random() * Math.PI * 2;
 
@@ -42,19 +42,23 @@ class Snow
 
   void reset()
   {
-    rate = Math.random() * 50 + 10;
+    rate = Math.random() * 100 + 10;
 
-    double r = Math.random();
-
-    size = 1;
-
-    if (r < 0.01)
+    if (rate < 40)
+    {
+      size = 1;
+    }
+    else if (rate < 80)
+    {
+      size = 2;
+    }
+    else if (rate < 100)
     {
       size = 3;
     }
-    else if (r < 0.10)
+    else
     {
-      size = 2;
+      size = 4;
     }
 
     x = Math.random() * (width * 1.5) - (width * .25);
