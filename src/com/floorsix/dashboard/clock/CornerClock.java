@@ -30,12 +30,15 @@ public class CornerClock implements Component
   private Font dateFont;
   private Font remainingFont;
   private Data data;
+  private boolean hasSurface;
 
   public CornerClock(Data data)
   {
     this.data = data;
 
     paletteChanged(data.getPalette());
+
+    hasSurface = false;
   }
 
   private void setSize(int width, int height)
@@ -94,6 +97,8 @@ public class CornerClock implements Component
       dateFont = new Font(Font.SANS_SERIF, Font.PLAIN, (int)dateFontSize);
       remainingFont = new Font(Font.SANS_SERIF, Font.PLAIN, (int)remainingFontSize);
     }
+
+    hasSurface = true;
   }
 
   @Override
@@ -104,31 +109,34 @@ public class CornerClock implements Component
   @Override
   public void draw(Graphics2D g)
   {
-    int padding = 10;
+    if (hasSurface)
+    {
+      int padding = 10;
 
-    g.setColor(palette.primary);
+      g.setColor(palette.primary);
 
-    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+      g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 
-    int x;
-    int y;
-    int w;
-    FontMetrics metrics;
+      int x;
+      int y;
+      int w;
+      FontMetrics metrics;
 
-    metrics = g.getFontMetrics(dateFont);
-    y = bounds.height - metrics.getDescent() - padding;
-    w = metrics.stringWidth(data.getDateString());
-    x = bounds.width - w - padding;
-    g.setFont(dateFont);
-    g.drawString(data.getDateString(), x, y);
-    y -= metrics.getAscent();
+      metrics = g.getFontMetrics(dateFont);
+      y = bounds.height - metrics.getDescent() - padding;
+      w = metrics.stringWidth(data.getDateString());
+      x = bounds.width - w - padding;
+      g.setFont(dateFont);
+      g.drawString(data.getDateString(), x, y);
+      y -= metrics.getAscent();
 
-    metrics = g.getFontMetrics(clockFont);
-    //y -= metrics.getDescent();
-    w = metrics.stringWidth(data.getTimeString());
-    x = bounds.width - w - padding;
-    g.setFont(clockFont);
-    g.drawString(data.getTimeString(), x, y);
+      metrics = g.getFontMetrics(clockFont);
+      //y -= metrics.getDescent();
+      w = metrics.stringWidth(data.getTimeString());
+      x = bounds.width - w - padding;
+      g.setFont(clockFont);
+      g.drawString(data.getTimeString(), x, y);
+    }
   }
 
   @Override

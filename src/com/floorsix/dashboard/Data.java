@@ -179,6 +179,11 @@ public class Data
     {
       overrideState = -1;
     }
+
+    if (listener != null)
+    {
+      listener.stateChanged(state);
+    }
   }
 
   private boolean isState(State x)

@@ -19,6 +19,7 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
   private boolean isSized;
   private ArrayList<Component> components;
   private ArrayList<Component> backgrounds;
+  private StateMessage stateMessage;
   private int backgroundIndex;
   private int componentIndex;
   private Data data;
@@ -50,6 +51,8 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
 
     addComponentListener(this);
 
+    stateMessage = new StateMessage();
+
     com.floorsix.dashboard.server.Server.launchServer(data);
 
     profiler = new Profiler("Frames", 200);
@@ -74,6 +77,8 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
     backgrounds.get(backgroundIndex).update();
 
     components.get(componentIndex).update();
+
+    stateMessage.update();
   }
 
   private void draw(Graphics2D g)
@@ -81,6 +86,8 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
     backgrounds.get(backgroundIndex).draw(g);
 
     components.get(componentIndex).draw(g);
+
+    stateMessage.draw(g);
   }
 
   @Override
@@ -129,6 +136,8 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
     {
       c.surfaceSized(w, h, g);
     }
+
+    stateMessage.surfaceSized(w, h, g);
 
     isSized = true;
   }
@@ -191,6 +200,8 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
 
     data.setBackground(statePrefs.getBackground(state));
     data.setComponent(statePrefs.getClock(state));
+
+    stateMessage.setState(state.toString());
   }
 
   @Override
