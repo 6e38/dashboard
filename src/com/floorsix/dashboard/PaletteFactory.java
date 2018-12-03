@@ -3,85 +3,39 @@ package com.floorsix.dashboard;
 
 class PaletteFactory
 {
-  private static final Palette morning = new Palette(0x555555, 0x555555, 0x000000);
-  private static final Palette beforeWork = new Palette(0x5555ff, 0x333388, 0x000033);
-  private static final Palette working = new Palette(0x00ff00, 0x008800, 0x000000);
-  private static final Palette afterWork = new Palette(0xdd0000, 0xbb0000, 0x330000);
-  private static final Palette nighttime = new Palette(0x555555, 0x555555, 0x000000);
-  private static final Palette weekend = new Palette(0x333333, 0x333333, 0x000000);
-
   private static final Palette[] palettes = {
-    morning,
-    beforeWork,
-    working,
-    afterWork,
-    nighttime,
-    weekend,
-    new Palette(0xffff00, 0x00ff00, 0x000000),
+    new Palette("dim", 0x555555, 0x555555, 0x000000),
+    new Palette("darkblue", 0x5555ff, 0x333388, 0x000033),
+    new Palette("terminal", 0x00ff00, 0x008800, 0x000000),
+    new Palette("danger", 0xdd0000, 0xbb0000, 0x330000),
+    new Palette("faint", 0x333333, 0x333333, 0x000000),
+    new Palette("yellow", 0xffff00, 0x00ff00, 0x000000),
+    new Palette("reverse", 0x000000, 0xffffff, 0xbbbbbb),
+    new Palette("snow", 0xffffff, 0x333333, 0xbbbbbb),
   };
 
   static int index = 0;
 
-  static Palette get()
-  {
-    return palettes[index];
-  }
-
-  static Palette getNext()
+  static String getNext()
   {
     index = (index + 1) % palettes.length;
-    return palettes[index];
+    return palettes[index].name;
   }
 
-  static Palette get(Data.State state)
-  {
-    Palette p = null;
-
-    switch (state)
-    {
-      case WorkingHours:
-        p = working;
-        break;
-
-      case AfterWork:
-        p = afterWork;
-        break;
-
-      case BeforeWork:
-        p = beforeWork;
-        break;
-
-      default:
-      case Weekend:
-        p = weekend;
-        break;
-
-      case Nighttime:
-        p = nighttime;
-        break;
-
-      case Morning:
-        p = morning;
-        break;
-    }
-
-    updateIndex(p);
-
-    return p;
-  }
-
-  private static void updateIndex(Palette p)
+  static Palette get(String name)
   {
     index = 0;
 
-    for (int i = 0; i < palettes.length; ++i)
+    for (int i = 0; i < palettes.length; i++)
     {
-      if (p == palettes[i])
+      if (palettes[i].name.equals(name))
       {
         index = i;
         break;
       }
     }
+
+    return palettes[index];
   }
 }
 

@@ -69,7 +69,7 @@ public class Snowfield implements Component
     g.setColor(palette.background);
     g.fillRect(0, 0, width, height);
 
-    g.setColor(snowColor);
+    g.setColor(palette.primary);
 
     for (Snow s : snow)
     {

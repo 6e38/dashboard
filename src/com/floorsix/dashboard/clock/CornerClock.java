@@ -113,7 +113,7 @@ public class CornerClock implements Component
     {
       int padding = 10;
 
-      g.setColor(palette.primary);
+      g.setColor(palette.secondary);
 
       g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 

@@ -166,8 +166,9 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
         break;
 
       case 'c':
-        Palette p = PaletteFactory.getNext();
-        data.setPalette(p);
+        name = PaletteFactory.getNext();
+        data.setPalette(name);
+        statePrefs.savePalette(data.getState(), name);
         break;
 
       case 'C':
@@ -195,9 +196,7 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
   @Override
   public void stateChanged(Data.State state)
   {
-    Palette p = PaletteFactory.get(state);
-    data.setPalette(p);
-
+    data.setPalette(statePrefs.getPalette(state));
     data.setBackground(statePrefs.getBackground(state));
     data.setComponent(statePrefs.getClock(state));
 

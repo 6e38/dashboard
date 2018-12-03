@@ -58,9 +58,10 @@ public class Data
 
     dfs = new DateFormatSymbols();
 
+    // TODO Grab these from preferences instead?
     setBackground(Background.Name);
     setComponent("clock");
-    setPalette(PaletteFactory.get());
+    setPalette("dim");
 
     state = State.Morning;
     actual = state;
@@ -128,9 +129,9 @@ public class Data
     return palette;
   }
 
-  public void setPalette(Palette palette)
+  public void setPalette(String name)
   {
-    this.palette = palette;
+    this.palette = PaletteFactory.get(name);
 
     if (listener != null)
     {
