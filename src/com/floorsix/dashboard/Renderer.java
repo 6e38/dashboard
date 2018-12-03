@@ -4,12 +4,12 @@
 
 package com.floorsix.dashboard;
 
-public class Engine extends Thread
+public class Renderer extends Thread
 {
   private Surface surface;
   private boolean running;
 
-  public Engine(Surface s)
+  public Renderer(Surface s)
   {
     surface = s;
     running = false;
