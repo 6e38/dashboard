@@ -21,7 +21,7 @@ public class Data
 
   private DataListener listener;
   private State state;
-  private int overrideState;
+  private State actual;
   private static final State[] stateMap = {
     State.Morning,
     State.BeforeWork,
@@ -56,8 +56,6 @@ public class Data
   {
     dayOfYear = -1;
 
-    overrideState = -1;
-
     dfs = new DateFormatSymbols();
 
     setBackground(Background.Name);
@@ -65,6 +63,7 @@ public class Data
     setPalette(PaletteFactory.get());
 
     state = State.Morning;
+    actual = state;
 
     presenceData = new PresenceData();
   }
@@ -161,24 +160,20 @@ public class Data
 
   public void cycleState()
   {
-    if (overrideState == -1)
+    int index = 0;
+
+    for (int i = 0; i < stateMap.length; ++i)
     {
-      for (int i = 0; i < stateMap.length; ++i)
+      if (stateMap[i] == state)
       {
-        if (stateMap[i] == state)
-        {
-          overrideState = i;
-          break;
-        }
+        index = i;
+        break;
       }
     }
 
-    overrideState = (overrideState + 1) % stateMap.length;
+    index = (index + 1) % stateMap.length;
 
-    if (stateMap[overrideState] == state)
-    {
-      overrideState = -1;
-    }
+    state = stateMap[index];
 
     if (listener != null)
     {
@@ -188,14 +183,7 @@ public class Data
 
   private boolean isState(State x)
   {
-    if (overrideState != -1)
-    {
-      return x == stateMap[overrideState];
-    }
-    else
-    {
-      return x == state;
-    }
+    return x == state;
   }
 
   public boolean isWorkingHours()
@@ -288,36 +276,38 @@ public class Data
 
   private void updateState()
   {
-    State old = state;
+    State current = actual;
 
     if (calendar.before(morningtime))
     {
-      state = State.Morning;
+      current = State.Morning;
     }
     else if (calendar.after(nighttime))
     {
-      state = State.Nighttime;
+      current = State.Nighttime;
     }
     else if (calendar.before(eightam))
     {
-      state = State.BeforeWork;
+      current = State.BeforeWork;
     }
     else if (calendar.after(fivepm))
     {
-      state = State.AfterWork;
+      current = State.AfterWork;
     }
     else if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY
         || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
     {
-      state = State.Weekend;
+      current = State.Weekend;
     }
     else
     {
-      state = State.WorkingHours;
+      current = State.WorkingHours;
     }
 
-    if (state != old)
+    if (current != actual)
     {
+      state = current;
+      actual = current;
       if (listener != null)
       {
         listener.stateChanged(state);
