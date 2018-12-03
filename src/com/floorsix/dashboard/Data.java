@@ -278,7 +278,12 @@ public class Data
   {
     State current = actual;
 
-    if (calendar.before(morningtime))
+    if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY
+        || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
+    {
+      current = State.Weekend;
+    }
+    else if (calendar.before(morningtime))
     {
       current = State.Morning;
     }
@@ -293,11 +298,6 @@ public class Data
     else if (calendar.after(fivepm))
     {
       current = State.AfterWork;
-    }
-    else if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY
-        || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
-    {
-      current = State.Weekend;
     }
     else
     {
