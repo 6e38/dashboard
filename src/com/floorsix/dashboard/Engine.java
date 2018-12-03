@@ -4,33 +4,39 @@
 
 package com.floorsix.dashboard;
 
-public class Renderer extends Thread
+public class Engine extends Thread
 {
   private Surface surface;
   private boolean running;
+  private Profiler profiler;
 
-  public Renderer(Surface s)
+  public Engine(Surface s)
   {
     surface = s;
     running = false;
+    profiler = new Profiler("Updates", 1000);
   }
 
   public void run()
   {
     running = true;
 
+    profiler.restart();
+
     while (running)
     {
-      surface.repaint();
+      surface.update();
 
       try
       {
-        sleep(16); // Attempt 62.5 fps
+        sleep(2);
       }
       catch (InterruptedException e)
       {
-        System.out.println("Interrupted");
+        running = false;
       }
+
+      profiler.update();
     }
   }
 

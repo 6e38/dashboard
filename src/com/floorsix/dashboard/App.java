@@ -54,6 +54,9 @@ public class App
           frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
           frame.setVisible(true);
 
+          Thread engine = new Engine(surface);
+          engine.start();
+
           Thread thread = new Renderer(surface);
           thread.start();
         }

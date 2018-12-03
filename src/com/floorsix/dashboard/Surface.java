@@ -22,6 +22,7 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
   private int backgroundIndex;
   private int componentIndex;
   private Data data;
+  private Profiler profiler;
 
   public Surface(String specialFile)
   {
@@ -49,6 +50,8 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
     addComponentListener(this);
 
     com.floorsix.dashboard.server.Server.launchServer(data);
+
+    profiler = new Profiler("Frames", 200);
   }
 
   public void addComponent(Component c)
@@ -61,7 +64,7 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
     backgrounds.add(c);
   }
 
-  private void update()
+  public void update()
   {
     data.update();
 
@@ -85,7 +88,6 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
     if (isSized)
     {
       Graphics2D g2d = (Graphics2D) g.create();
-      update();
       draw(g2d);
       g2d.dispose();
     }
@@ -94,6 +96,8 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
       g.setColor(Color.BLACK);
       g.fillRect(0, 0, getWidth(), getHeight());
     }
+
+    profiler.update();
   }
 
   @Override
