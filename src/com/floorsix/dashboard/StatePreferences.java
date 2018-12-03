@@ -36,22 +36,25 @@ public class StatePreferences
     return prefs.getString(key, "terminal");
   }
 
-  void setBackground(Data.State state, String background)
+  void saveBackground(Data.State state, String background)
   {
     String key = BackgroundKey + state;
     prefs.setString(key, background);
+    prefs.commit();
   }
 
-  void setClock(Data.State state, String clock)
+  void saveClock(Data.State state, String clock)
   {
     String key = ClockKey + state;
     prefs.setString(key, clock);
+    prefs.commit();
   }
 
-  void setPalette(Data.State state, String palette)
+  void savePalette(Data.State state, String palette)
   {
     String key = PaletteKey + state;
     prefs.setString(key, palette);
+    prefs.commit();
   }
 }
 

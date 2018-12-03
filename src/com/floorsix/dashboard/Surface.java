@@ -141,6 +141,8 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
   @Override
   public void keyPressed(KeyEvent e)
   {
+    String name;
+
     switch (e.getKeyChar())
     {
       case '>':
@@ -149,7 +151,9 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
 
       case 'b':
         backgroundIndex = (backgroundIndex + 1) % backgrounds.size();
-        data.setBackground(backgrounds.get(backgroundIndex).getName());
+        name = backgrounds.get(backgroundIndex).getName();
+        data.setBackground(name);
+        statePrefs.saveBackground(data.getState(), name);
         break;
 
       case 'c':
@@ -159,7 +163,9 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
 
       case 'C':
         componentIndex = (componentIndex + 1) % components.size();
-        data.setComponent(components.get(componentIndex).getName());
+        name = components.get(componentIndex).getName();
+        data.setComponent(name);
+        statePrefs.saveClock(data.getState(), name);
         break;
 
       default:
@@ -183,37 +189,8 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
     Palette p = PaletteFactory.get(state);
     data.setPalette(p);
 
-    String s;
-
-    switch (state)
-    {
-      case WorkingHours:
-        s = com.floorsix.dashboard.thematrix.Matrix.Name;
-        break;
-
-      case AfterWork:
-        s = com.floorsix.dashboard.drip.Dripping.Name;
-        break;
-
-      case BeforeWork:
-        s = Background.Name;
-        break;
-
-      default:
-      case Weekend:
-        s = Background.Name;
-        break;
-
-      case Nighttime:
-        s = Background.Name;
-        break;
-
-      case Morning:
-        s = Background.Name;
-        break;
-    }
-
-    data.setBackground(s);
+    data.setBackground(statePrefs.getBackground(state));
+    data.setComponent(statePrefs.getClock(state));
   }
 
   @Override

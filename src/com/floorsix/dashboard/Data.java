@@ -339,5 +339,10 @@ public class Data
   {
     return presenceData.getPresenceEvents();
   }
+
+  public State getState()
+  {
+    return state;
+  }
 }
 
