@@ -22,6 +22,7 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
   private int backgroundIndex;
   private int componentIndex;
   private Data data;
+  private StatePreferences statePrefs;
   private Profiler profiler;
 
   public Surface(String specialFile)
@@ -52,6 +53,8 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
     com.floorsix.dashboard.server.Server.launchServer(data);
 
     profiler = new Profiler("Frames", 200);
+
+    statePrefs = new StatePreferences();
   }
 
   public void addComponent(Component c)

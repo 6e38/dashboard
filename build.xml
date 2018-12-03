@@ -16,6 +16,7 @@
   <target name="submodules">
     <ant antfile="preferences-java/build.xml" useNativeBasedir="true">
       <target name="compile"/>
+      <target name="debug"/>
     </ant>
   </target>
 
@@ -39,6 +40,14 @@
 
   <target name="run" depends="jar">
     <java jar="${jarpath}/${jarfile}" fork="true"/>
+  </target>
+
+  <target name="debug" depends="submodules">
+    <mkdir dir="${debugpath}"/>
+    <javac srcdir="${srcpath}" destdir="${debugpath}" debug="on" debuglevel="lines,vars,source"/>
+    <java classname="com.floorsix.dashboard.App" classpath="${debugpath}" fork="true">
+      <jvmarg value="-ea"/>
+    </java>
   </target>
 
   <target name="server">
