@@ -215,6 +215,8 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
     {
       c.paletteChanged(palette);
     }
+
+    stateMessage.setState(palette.name);
   }
 
   @Override
