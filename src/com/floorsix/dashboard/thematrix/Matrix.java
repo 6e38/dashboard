@@ -21,6 +21,7 @@ public class Matrix implements CollisionAvoidance, Component
 
   private Palette palette;
 
+  private boolean hasSurface;
   private Data data;
   private String specialFile;
   private int width;
@@ -39,6 +40,8 @@ public class Matrix implements CollisionAvoidance, Component
 
   public Matrix(Data data, String specialFile)
   {
+    hasSurface = false;
+
     this.data = data;
     this.specialFile = specialFile;
 
@@ -76,34 +79,39 @@ public class Matrix implements CollisionAvoidance, Component
     {
       drop[i] = new Drop(cols, rows, model, this, specialFile);
     }
+
+    hasSurface = true;
   }
 
   @Override
   public void draw(Graphics2D g)
   {
-    g.setColor(Color.BLACK);
-    g.fillRect(0, 0, width, height);
-
-    int lastColor = Model.Color;
-    g.setColor(ColorMap[lastColor]);
-    g.setFont(mainFont);
-
-    char[][] data = model.getData();
-    int[][] color = model.getColors();
-    int cols = data[0].length;
-    int rows = data.length;
-
-    for (int y = 0; y < rows; y++)
+    if (hasSurface)
     {
-      for (int x = 0; x < cols; x++)
-      {
-        if (color[y][x] != lastColor)
-        {
-          lastColor = color[y][x];
-          g.setColor(ColorMap[lastColor]);
-        }
+      g.setColor(Color.BLACK);
+      g.fillRect(0, 0, width, height);
 
-        g.drawChars(data[y], x, 1, x * charWidth + offsetX, y * charHeight + offsetY);
+      int lastColor = Model.Color;
+      g.setColor(ColorMap[lastColor]);
+      g.setFont(mainFont);
+
+      char[][] data = model.getData();
+      int[][] color = model.getColors();
+      int cols = data[0].length;
+      int rows = data.length;
+
+      for (int y = 0; y < rows; y++)
+      {
+        for (int x = 0; x < cols; x++)
+        {
+          if (color[y][x] != lastColor)
+          {
+            lastColor = color[y][x];
+            g.setColor(ColorMap[lastColor]);
+          }
+
+          g.drawChars(data[y], x, 1, x * charWidth + offsetX, y * charHeight + offsetY);
+        }
       }
     }
   }
@@ -111,11 +119,14 @@ public class Matrix implements CollisionAvoidance, Component
   @Override
   public void update()
   {
-    for (int i = 0; i < drop.length; i++)
+    if (hasSurface)
     {
-      if (drop[i].update())
+      for (int i = 0; i < drop.length; i++)
       {
-        drop[i] = new Drop(cols, rows, model, this, null);
+        if (drop[i].update())
+        {
+          drop[i] = new Drop(cols, rows, model, this, null);
+        }
       }
     }
   }
