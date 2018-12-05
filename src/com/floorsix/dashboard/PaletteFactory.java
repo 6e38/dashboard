@@ -8,6 +8,7 @@ class PaletteFactory
     new Palette("darkblue", 0x5555ff, 0x333388, 0x000044),
     new Palette("terminal", 0x00ff00, 0x008800, 0x000000),
     new Palette("danger", 0xdd0000, 0xbb0000, 0x440000),
+    new Palette("blood", 0x220000, 0x660000, 0x880000),
     new Palette("faint", 0x333333, 0x333333, 0x000000),
     new Palette("yellow", 0xffff00, 0x00ff00, 0x000000),
     new Palette("reverse", 0x000000, 0xbbbbbb, 0xffffff),

@@ -22,6 +22,7 @@ public class Dripping implements Component
   private int x1;
   private int x2;
   private int y;
+  private long lastTime;
 
   private Palette palette;
 
@@ -44,6 +45,8 @@ public class Dripping implements Component
     x1 = 0;
     x2 = 0;
     y = 0;
+
+    lastTime = System.currentTimeMillis();
   }
 
   @Override
@@ -61,9 +64,9 @@ public class Dripping implements Component
     int w = 400; // magic numbers!
     int h = 300;
 
-    x1 = width / 2 - w / 2;
-    x2 = x1 + w;
-    y = height / 2 + h / 2;
+    x1 = 0;
+    x2 = width;
+    y = 0;
 
     for (Drip drip : drips)
     {
@@ -74,9 +77,13 @@ public class Dripping implements Component
   @Override
   public void update()
   {
+    long currentTime = System.currentTimeMillis();
+    float dt = (float)(currentTime - lastTime) / 1000f;
+    lastTime = currentTime;
+
     for (Drip drip : drips)
     {
-      drip.update(0.050f); // magic number!
+      drip.update(dt);
 
       if (drip.e.y > height)
       {
