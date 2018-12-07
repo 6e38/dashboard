@@ -27,6 +27,7 @@ public class Drop
   private Model model;
   private boolean isSpecial;
   private int color;
+  private long lastTime;
 
   public Drop(int theCols, int theRows, Model theModel, CollisionAvoidance ca, String specialFile)
   {
@@ -80,6 +81,8 @@ public class Drop
 
     startY = y;
     endY = y + message.length;
+
+    lastTime = System.currentTimeMillis();
   }
 
   private char getRandomChar()
@@ -108,39 +111,46 @@ public class Drop
 
   public boolean update()
   {
+    long currentTime = System.currentTimeMillis();
+
     boolean complete = false;
 
-    if (updates < message.length)
+    if (currentTime - lastTime > 50)
     {
-      model.setChar(message[index++], x, y++, color);
-    }
-    else if (updates < duration)
-    {
-      if (!isSpecial)
+      lastTime = currentTime;
+
+      if (updates < message.length)
       {
-        model.setChar(getRandomChar(), x, y, color);
+        model.setChar(message[index++], x, y++, color);
       }
-    }
-    else
-    {
-      if (isSpecial)
+      else if (updates < duration)
       {
-        isSpecial = false;
-        hasSpecial = false;
-        index = 0;
-        y = startY;
-        color = Model.getRandomShade();
-        makeRandomMessage(message);
-        duration = message.length;
-        updates = -1;
+        if (!isSpecial)
+        {
+          model.setChar(getRandomChar(), x, y, color);
+        }
       }
       else
       {
-        complete = true;
+        if (isSpecial)
+        {
+          isSpecial = false;
+          hasSpecial = false;
+          index = 0;
+          y = startY;
+          color = Model.getRandomShade();
+          makeRandomMessage(message);
+          duration = message.length;
+          updates = -1;
+        }
+        else
+        {
+          complete = true;
+        }
       }
-    }
 
-    ++updates;
+      ++updates;
+    }
 
     return complete;
   }

@@ -88,7 +88,7 @@ public class Matrix implements CollisionAvoidance, Component
   {
     if (hasSurface)
     {
-      g.setColor(Color.BLACK);
+      g.setColor(palette.background);
       g.fillRect(0, 0, width, height);
 
       int lastColor = Model.Color;
