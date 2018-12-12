@@ -43,6 +43,7 @@ public class Data
 
   private String dateString;
   private String timeString;
+  private String timeString2;
   private String ampmString;
   private String remainingString;
 
@@ -88,6 +89,7 @@ public class Data
       hour = 12;
     }
     timeString = String.format("%d:%02d", hour, calendar.get(Calendar.MINUTE));
+    timeString2 = String.format("%d'%02d", hour, calendar.get(Calendar.MINUTE));
 
     ampmString = dfs.getAmPmStrings()[calendar.get(Calendar.AM_PM)];
 
@@ -147,6 +149,11 @@ public class Data
   public String getTimeString()
   {
     return timeString;
+  }
+
+  public String getTimeString2()
+  {
+    return timeString2;
   }
 
   public String getAmPmString()

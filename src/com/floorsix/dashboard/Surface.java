@@ -38,6 +38,7 @@ public class Surface extends JPanel implements DataListener, ComponentListener, 
     components = new ArrayList<Component>();
     addComponent(new com.floorsix.dashboard.clock.Clock(data));
     addComponent(new com.floorsix.dashboard.clock.CornerClock(data));
+    addComponent(new com.floorsix.dashboard.clock.ReverseCornerClock(data));
 
     backgrounds = new ArrayList<Component>();
     addBackground(new Background(data));
